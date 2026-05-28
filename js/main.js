@@ -40,6 +40,7 @@ const PORTFOLIO_ITEMS = [
     category: "Ландшафтное освещение",
     location: "Кострома, частный дом",
     caseNum: "CASE 001",
+    year: "2023",
   },
   {
     id: 2,
@@ -49,6 +50,7 @@ const PORTFOLIO_ITEMS = [
     category: "Архитектурная подсветка",
     location: "Костромская область",
     caseNum: "CASE 002",
+    year: "2024",
   },
   {
     id: 3,
@@ -58,6 +60,7 @@ const PORTFOLIO_ITEMS = [
     category: "Архитектурное освещение",
     location: "Кострома, коммерческий объект",
     caseNum: "CASE 003",
+    year: "2024",
   },
 ];
 
@@ -65,6 +68,7 @@ const PORTFOLIO_ITEMS = [
    ИНИЦИАЛИЗАЦИЯ
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
+  initPageIntro();      // первым — блокирует скролл и запускает reveal
   injectConfigData();
   initCursor();
   initProgressBar();
@@ -73,9 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initSmoothScroll();
   initScrollReveal();
   initParallax();
-  initSplitText();
+  initSplitText();      // учитывает intro-задержку через sessionStorage
   initMarquee();
-  initPortfolio();
+  initCases();          // fullscreen sticky cases (заменяет initPortfolio)
+  initPortfolio();      // no-op если #portfolio-track отсутствует
   initLightbox();
   initTestimonialsSlider();
   initContactForm();
@@ -336,9 +341,11 @@ function initSplitText() {
   });
 
   const inners = title.querySelectorAll(".split-word-inner");
+  // На первом визите intro занимает ~1.4s — откладываем split-text
+  const baseDelay = sessionStorage.getItem("intro-seen") ? 500 : 1650;
   setTimeout(() => {
     inners.forEach((el, i) => {
-      setTimeout(() => el.classList.add("is-visible"), i * 90 + 500);
+      setTimeout(() => el.classList.add("is-visible"), i * 90 + baseDelay);
     });
   }, 50);
 }
@@ -686,6 +693,155 @@ function initMagneticButtons() {
       btn.style.transform = "";
     });
   });
+}
+
+/* ============================================================
+   PAGE INTRO / REVEAL
+   ============================================================ */
+function initPageIntro() {
+  const intro = document.getElementById("page-intro");
+  if (!intro) return;
+
+  // Показываем только раз за сессию
+  if (sessionStorage.getItem("intro-seen")) {
+    intro.remove();
+    return;
+  }
+
+  // Блокируем скролл на время интро
+  document.documentElement.style.overflow = "hidden";
+
+  // Небольшая пауза — чтобы браузер отрисовал панели, затем logo
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      intro.classList.add("is-visible");
+
+      // Начинаем разъезд через 650ms после появления логотипа
+      setTimeout(() => {
+        intro.classList.add("is-leaving");
+
+        // Ждём окончания анимации панелей (900ms transition)
+        setTimeout(() => {
+          document.documentElement.style.overflow = "";
+          intro.remove();
+          sessionStorage.setItem("intro-seen", "1");
+        }, 950);
+      }, 650);
+    });
+  });
+}
+
+/* ============================================================
+   FULLSCREEN CASES — sticky scroll storytelling
+   ============================================================ */
+function initCases() {
+  const wrap   = document.getElementById("cases-sticky-wrap");
+  const sticky = document.getElementById("cases-sticky");
+  const dotsWrap = document.getElementById("cases-dots");
+  if (!wrap || !sticky) return;
+
+  const n = PORTFOLIO_ITEMS.length;
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  // На десктопе задаём высоту обёртки: каждый кейс = 1.4vh прокрутки
+  if (!isMobile) {
+    wrap.style.height = `${n * 140}vh`;
+  }
+
+  // Рендерим слайды
+  PORTFOLIO_ITEMS.forEach((item, idx) => {
+    const slide = document.createElement("div");
+    slide.className = "case-slide" + (idx === 0 ? " is-active" : "");
+    slide.setAttribute("role", "article");
+    slide.setAttribute("aria-label", item.title);
+
+    slide.innerHTML = `
+      <div class="case-slide__bg">
+        <img
+          class="case-slide__img"
+          src="${item.src}"
+          alt="${item.title} — ${item.category}"
+          loading="${idx === 0 ? "eager" : "lazy"}"
+          onerror="this.style.display='none'"
+        />
+        <div class="case-slide__overlay"></div>
+      </div>
+      <div class="case-slide__meta-top">
+        <span class="case-slide__year">${item.year}</span>
+        <span class="case-slide__loc-top">${item.location}</span>
+      </div>
+      <div class="case-slide__content">
+        <span class="case-slide__num">${item.caseNum}</span>
+        <span class="case-slide__cat">${item.category}</span>
+        <h3 class="case-slide__title">${item.title}</h3>
+      </div>
+    `;
+
+    slide.addEventListener("click", () => openLightbox(idx));
+    // Вставляем ДО блока с dots
+    sticky.insertBefore(slide, dotsWrap);
+  });
+
+  // Scroll-hint (desktop only)
+  if (!isMobile) {
+    const hint = document.createElement("div");
+    hint.className = "cases-hint";
+    hint.innerHTML = `<div class="cases-hint__line"></div><span class="cases-hint__text">Scroll</span>`;
+    sticky.appendChild(hint);
+  }
+
+  // Dots
+  PORTFOLIO_ITEMS.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.className = "case-dot" + (i === 0 ? " is-active" : "");
+    dot.setAttribute("aria-label", `Кейс ${i + 1}`);
+    dot.addEventListener("click", () => scrollToCase(i));
+    dotsWrap?.appendChild(dot);
+  });
+
+  const slides = sticky.querySelectorAll(".case-slide");
+  const dots   = dotsWrap?.querySelectorAll(".case-dot");
+  let currentCase = 0;
+
+  function setCase(idx) {
+    if (idx === currentCase && slides[idx]?.classList.contains("is-active")) return;
+    currentCase = idx;
+    slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
+    dots?.forEach((d, i) => d.classList.toggle("is-active", i === idx));
+  }
+
+  function scrollToCase(idx) {
+    if (isMobile) return;
+    const wrapTop = wrap.getBoundingClientRect().top + window.scrollY;
+    const segH    = wrap.offsetHeight / n;
+    // Прокручиваем к середине сегмента кейса
+    window.scrollTo({ top: wrapTop + idx * segH + segH * 0.1, behavior: "smooth" });
+  }
+
+  // Десктоп: трекаем прогресс прокрутки внутри обёртки
+  if (!isMobile) {
+    let rafId;
+    window.addEventListener("scroll", () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const rect     = wrap.getBoundingClientRect();
+        const vh       = window.innerHeight;
+        const scrollable = wrap.offsetHeight - vh;
+        if (scrollable <= 0) return;
+
+        // sticky не зафиксирован ещё или уже вышел
+        if (rect.top > 0 || rect.bottom < vh) return;
+
+        const scrolled  = -rect.top;
+        const progress  = Math.max(0, Math.min(1, scrolled / scrollable));
+        const idx       = Math.min(Math.floor(progress * n), n - 1);
+        setCase(idx);
+      });
+    }, { passive: true });
+  }
+
+  setCase(0);
 }
 
 /* ============================================================
