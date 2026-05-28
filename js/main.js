@@ -887,6 +887,23 @@ function initCases() {
         setCase(idx);
       });
     }, { passive: true });
+
+    // Keyboard navigation: ← / → когда sticky в viewport
+    document.addEventListener("keydown", (e) => {
+      if (e.target.matches("input, textarea, select")) return;
+      const rect = wrap.getBoundingClientRect();
+      const inView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+      if (!inView) return;
+
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        scrollToCase(Math.min(n - 1, currentCase + 1));
+      }
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        scrollToCase(Math.max(0, currentCase - 1));
+      }
+    });
   }
 
   setCase(0);
