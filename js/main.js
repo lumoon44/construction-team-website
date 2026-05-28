@@ -296,31 +296,51 @@ function initParallax() {
 }
 
 /* ============================================================
-   SPLIT-TEXT HERO
+   SPLIT-TEXT HERO — TreeWalker (safe, preserves HTML tags)
    ============================================================ */
 function initSplitText() {
   const title = document.getElementById("hero-title");
   if (!title) return;
 
-  /* Собираем текстовые узлы и сохраняем структуру */
-  const html = title.innerHTML;
+  /* Collect only TEXT nodes (skips <br>, <em> etc.) */
+  const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT, {
+    acceptNode: (node) =>
+      node.textContent.trim()
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_REJECT,
+  });
 
-  /* Разбиваем каждую строку на слова */
-  title.innerHTML = html.replace(/([^\s<>]+)/g, (word) => {
-    if (word.startsWith('<') || word.startsWith('>')) return word;
-    return `<span class="split-word"><span class="split-word-inner">${word}</span></span>`;
+  const textNodes = [];
+  let node;
+  while ((node = walker.nextNode())) textNodes.push(node);
+
+  /* Wrap each word in a text node, preserve whitespace as text nodes */
+  textNodes.forEach((textNode) => {
+    const parts = textNode.textContent.split(/(\s+)/);
+    const frag = document.createDocumentFragment();
+    parts.forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        frag.appendChild(document.createTextNode(part));
+      } else {
+        const outer = document.createElement("span");
+        outer.className = "split-word";
+        const inner = document.createElement("span");
+        inner.className = "split-word-inner";
+        inner.textContent = part;
+        outer.appendChild(inner);
+        frag.appendChild(outer);
+      }
+    });
+    textNode.parentNode.replaceChild(frag, textNode);
   });
 
   const inners = title.querySelectorAll(".split-word-inner");
-
-  /* Задержка по порядку */
   setTimeout(() => {
     inners.forEach((el, i) => {
-      setTimeout(() => {
-        el.classList.add("is-visible");
-      }, i * 80 + 600);
+      setTimeout(() => el.classList.add("is-visible"), i * 90 + 500);
     });
-  }, 100);
+  }, 50);
 }
 
 /* ============================================================
@@ -351,66 +371,78 @@ function initMarquee() {
 }
 
 /* ============================================================
-   ПОРТФОЛИО
+   ПОРТФОЛИО — СЛАЙДЕР
    ============================================================ */
 function initPortfolio() {
-  const grid = document.getElementById("portfolio-grid");
-  if (!grid) return;
+  const track = document.getElementById("portfolio-track");
+  if (!track) return;
 
+  let current = 0;
+  let touchStartX = 0;
+
+  /* Render slides */
   PORTFOLIO_ITEMS.forEach((item, idx) => {
-    const card = document.createElement("article");
-    card.className = "portfolio-card";
-    card.setAttribute("data-clip-reveal", "");
-    card.setAttribute("data-index", idx);
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Открыть проект: ${item.title}`);
+    const slide = document.createElement("div");
+    slide.className = "portfolio-slide";
+    slide.setAttribute("aria-label", item.title);
 
-    const caseLabel = String(idx + 1).padStart(3, "0");
-
-    card.innerHTML = `
-      <div class="portfolio-card__img-wrap" data-case="${item.caseNum}">
-        <img
-          class="portfolio-card__img"
-          src="${item.src}"
-          alt="${item.title} — ${item.category}"
-          loading="lazy"
-          onerror="this.closest('.portfolio-card__img-wrap').classList.add('placeholder')"
-        />
-        <div class="portfolio-card__overlay">
-          <span class="portfolio-card__case">${item.caseNum}</span>
-          <span class="portfolio-card__cat">${item.category}</span>
-          <h3 class="portfolio-card__title">${item.title}</h3>
-          <span class="portfolio-card__location">${item.location}</span>
-        </div>
+    slide.innerHTML = `
+      <img
+        class="portfolio-slide__img"
+        src="${item.src}"
+        alt="${item.title} — ${item.category}"
+        loading="${idx === 0 ? 'eager' : 'lazy'}"
+        onerror="this.style.display='none'"
+      />
+      <div class="portfolio-slide__overlay">
+        <span class="portfolio-slide__case">${item.caseNum}</span>
+        <span class="portfolio-slide__cat">${item.category}</span>
+        <h3 class="portfolio-slide__title">${item.title}</h3>
+        <span class="portfolio-slide__loc">${item.location}</span>
       </div>
     `;
 
-    card.addEventListener("click", () => openLightbox(idx));
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") openLightbox(idx);
-    });
-
-    grid.appendChild(card);
+    slide.addEventListener("click", () => openLightbox(idx));
+    track.appendChild(slide);
   });
 
-  /* Clip-path reveal с задержкой */
-  const cards = grid.querySelectorAll("[data-clip-reveal]");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add("is-revealed");
-          }, parseInt(entry.target.dataset.index) * 150);
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
+  /* Dots */
+  const dotsWrap = document.getElementById("portfolio-dots");
+  PORTFOLIO_ITEMS.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.className = "portfolio-dot";
+    dot.setAttribute("aria-label", `Проект ${i + 1}`);
+    dot.addEventListener("click", () => goTo(i));
+    dotsWrap?.appendChild(dot);
+  });
 
-  cards.forEach((el) => observer.observe(el));
+  const dots = dotsWrap?.querySelectorAll(".portfolio-dot");
+  const counter = document.getElementById("portfolio-counter");
+
+  function goTo(index) {
+    current = ((index % PORTFOLIO_ITEMS.length) + PORTFOLIO_ITEMS.length) % PORTFOLIO_ITEMS.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots?.forEach((d, i) => d.classList.toggle("is-active", i === current));
+    if (counter) {
+      counter.textContent = `${String(current + 1).padStart(2, "0")} / ${String(PORTFOLIO_ITEMS.length).padStart(2, "0")}`;
+    }
+  }
+
+  document.getElementById("portfolio-prev")?.addEventListener("click", () => goTo(current - 1));
+  document.getElementById("portfolio-next")?.addEventListener("click", () => goTo(current + 1));
+
+  /* Touch swipe */
+  const sliderEl = document.getElementById("portfolio-slider");
+  sliderEl?.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  sliderEl?.addEventListener("touchend", (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+  }, { passive: true });
+
+  goTo(0);
 }
 
 /* ============================================================
@@ -502,15 +534,24 @@ function initTestimonialsSlider() {
   let autoTimer;
 
   TESTIMONIALS.forEach((t) => {
-    const stars = "★".repeat(t.rating) + "☆".repeat(5 - t.rating);
+    const initials = t.name
+      .split(/\s+/)
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+
     const slide = document.createElement("div");
     slide.className = "testimonial-slide";
     slide.innerHTML = `
-      <div class="testimonial__stars" aria-label="${t.rating} из 5">${stars}</div>
-      <p class="testimonial__text">"${t.text}"</p>
+      <div class="testimonial__quote-mark" aria-hidden="true">"</div>
+      <p class="testimonial__text">${t.text}</p>
       <div class="testimonial__author">
-        <strong class="testimonial__name">${t.name}</strong>
-        <span class="testimonial__role">${t.role}</span>
+        <div class="testimonial__avatar" aria-hidden="true">${initials}</div>
+        <div class="testimonial__author-info">
+          <strong class="testimonial__name">${t.name}</strong>
+          <span class="testimonial__role">${t.role}</span>
+        </div>
       </div>
     `;
     track.appendChild(slide);
