@@ -23,6 +23,16 @@
 </head>
 <body>
 
+<!-- Page intro / reveal (shown once per session) -->
+<div class="page-intro" id="page-intro" aria-hidden="true">
+  <div class="page-intro__panel page-intro__panel--top"></div>
+  <div class="page-intro__panel page-intro__panel--bottom"></div>
+  <div class="page-intro__center">
+    <span class="page-intro__wordmark">КОНТУР</span>
+    <span class="page-intro__sub">Кострома · Est. 2018</span>
+  </div>
+</div>
+
 <!-- Grain overlay -->
 <div class="grain-overlay" aria-hidden="true"></div>
 
@@ -190,40 +200,32 @@
         </div>
       </div>
 
-      <div class="values-grid" aria-label="Наши ценности">
+      <div class="about__right" data-reveal data-reveal-delay="120">
 
-        <div class="value-card" data-reveal data-reveal-delay="80">
-          <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="value-card__title">Качество материалов</h3>
-          <p class="value-card__text">Работаем только с проверенными производителями светотехники и строительных материалов.</p>
+        <blockquote class="about__quote">
+          «Каждый объект —<br>
+          это наша <em>подпись</em><br>
+          в городе»
+        </blockquote>
+
+        <div class="about__facts">
+          <span class="about__fact">
+            <span class="about__fact-num" data-counter="6" data-suffix="+">6+</span>
+            <span class="about__fact-label">лет</span>
+          </span>
+          <span class="about__fact-sep" aria-hidden="true">/</span>
+          <span class="about__fact">
+            <span class="about__fact-num" data-counter="120" data-suffix="+">120+</span>
+            <span class="about__fact-label">объектов</span>
+          </span>
+          <span class="about__fact-sep" aria-hidden="true">/</span>
+          <span class="about__fact">
+            <span class="about__fact-num">3</span>
+            <span class="about__fact-label">года гарантия</span>
+          </span>
         </div>
 
-        <div class="value-card" data-reveal data-reveal-delay="160">
-          <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="value-card__title">Чёткие сроки</h3>
-          <p class="value-card__text">Составляем реалистичный график и строго его придерживаемся. Штрафные санкции прописываем в договоре.</p>
-        </div>
-
-        <div class="value-card" data-reveal data-reveal-delay="240">
-          <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="value-card__title">Гарантия 3 года</h3>
-          <p class="value-card__text">На выполненные работы и установленное оборудование даём письменную гарантию 3 года.</p>
-        </div>
-
-        <div class="value-card" data-reveal data-reveal-delay="320">
-          <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3 class="value-card__title">Местная бригада</h3>
-          <p class="value-card__text">Живём и работаем в Костроме. Приедем быстро, знаем специфику региона, не везём бригаду из другого города.</p>
-        </div>
+        <p class="about__vert-text" aria-hidden="true">KONTUR · KOSTROMA · SINCE 2018</p>
 
       </div>
 
@@ -324,47 +326,28 @@
 
 
 <!-- ============================================================
-     4. ПОРТФОЛИО
+     4. ПОРТФОЛИО — fullscreen sticky cases
      ============================================================ -->
-<section class="section" id="portfolio" aria-labelledby="portfolio-title">
-  <div class="container">
+<section class="cases-section" id="portfolio" aria-labelledby="portfolio-title">
 
-    <div class="portfolio__header">
-      <div>
-        <p class="section-index" data-reveal>003 / Работы</p>
-        <p class="section-label" data-reveal data-reveal-delay="40">Работы</p>
-        <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="100">
-          Примеры наших объектов
-        </h2>
-      </div>
-      <p class="section-subtitle" data-reveal data-reveal-delay="120" style="max-width: 28ch; text-align: right;">
-        Нажмите на карточку, чтобы увидеть проект подробнее
-      </p>
-    </div>
-
-    <div class="portfolio-slider-wrap" data-reveal>
-      <div class="portfolio-slider" id="portfolio-slider" aria-label="Галерея работ">
-        <div class="portfolio-slider__track" id="portfolio-track"></div>
-      </div>
-      <div class="portfolio-slider__footer">
-        <div class="portfolio-slider__nav">
-          <button class="slider-btn" id="portfolio-prev" aria-label="Предыдущий проект">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="slider-btn" id="portfolio-next" aria-label="Следующий проект">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <span class="portfolio-slider__counter" id="portfolio-counter"></span>
-        <div class="portfolio-slider__dots" id="portfolio-dots"></div>
-      </div>
-    </div>
-
+  <div class="cases-intro container">
+    <p class="section-index" data-reveal>003 / Работы</p>
+    <p class="section-label" data-reveal data-reveal-delay="40">Избранные работы</p>
+    <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="100">
+      Примеры наших объектов
+    </h2>
+    <p class="section-subtitle" data-reveal data-reveal-delay="160">
+      Нажмите на проект, чтобы увидеть детали
+    </p>
   </div>
+
+  <div class="cases-sticky-wrap" id="cases-sticky-wrap">
+    <div class="cases-sticky" id="cases-sticky" aria-label="Галерея работ">
+      <!-- Cases rendered by JS from PORTFOLIO_ITEMS -->
+      <div class="cases-dots" id="cases-dots" aria-label="Навигация кейсов"></div>
+    </div>
+  </div>
+
 </section>
 
 
@@ -595,65 +578,41 @@
 
 
 <!-- ============================================================
-     8. ФУТЕР
+     8. ФУТЕР — oversized studio style
      ============================================================ -->
 <footer class="footer" id="footer" role="contentinfo">
+
+  <!-- Огромный неймарк на всю ширину -->
+  <div class="footer__wordmark-wrap">
+    <a href="#hero" class="footer__wordmark" aria-label="Контур — на главную">КОНТУР</a>
+  </div>
+
+  <div class="footer__mid-divider"></div>
+
   <div class="container">
 
-    <div class="footer__inner">
+    <!-- Контакты (типографический объект) + соцсети -->
+    <div class="footer__contact-row">
 
-      <div>
-        <a href="#hero" class="logo" aria-label="Контур — на главную">
-          <!-- LOGO: замените src на путь к файлу логотипа -->
-          <!-- <img src="assets/logo.svg" alt="Контур" class="logo__img" width="120" height="40" /> -->
-          <span class="logo__name">Конт<span>ур</span></span>
-          <span class="logo__sub">Кострома · Est. 2018</span>
+      <div class="footer__contact-main">
+        <a href="tel:+74942000000" class="footer__contact-phone" data-config-href="contacts.phoneHref">
+          <span data-config="contacts.phone">+7 (494) 200-00-00</span>
         </a>
-        <p class="footer__brand-desc">
-          Строительная бригада из Костромы. Благоустройство
-          территорий, ландшафтное и архитектурное освещение.
-          Строим пространство, в котором хочется жить.
-        </p>
+        <a href="mailto:info@kontur-kostroma.ru" class="footer__contact-email" data-config-href="contacts.email">
+          <span data-config="contacts.email">info@kontur-kostroma.ru</span>
+        </a>
+        <span class="footer__contact-addr">г. Кострома и область · Пн–Пт 9:00–18:00</span>
       </div>
 
-      <div>
-        <p class="footer__col-title">Разделы</p>
-        <ul class="footer__links">
-          <li><a href="#about"        class="footer__link">О нас</a></li>
-          <li><a href="#services"     class="footer__link">Услуги</a></li>
-          <li><a href="#portfolio"    class="footer__link">Работы</a></li>
-          <li><a href="#process"      class="footer__link">Как работаем</a></li>
-          <li><a href="#testimonials" class="footer__link">Отзывы</a></li>
-          <li><a href="#contact"      class="footer__link">Контакты</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <p class="footer__col-title">Услуги</p>
-        <ul class="footer__links">
-          <li><a href="#services" class="footer__link">Благоустройство</a></li>
-          <li><a href="#services" class="footer__link">Ландшафтное освещение</a></li>
-          <li><a href="#services" class="footer__link">Архитектурная подсветка</a></li>
-          <li><a href="#services" class="footer__link">Террасы и беседки</a></li>
-          <li><a href="#services" class="footer__link">Заборы и ограждения</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <p class="footer__col-title">Связаться</p>
-        <ul class="footer__links" style="margin-bottom: var(--space-6);">
-          <li>
-            <a href="tel:+74942000000" class="footer__link">
-              <span data-config="contacts.phone">+7 (494) 200-00-00</span>
-            </a>
-          </li>
-          <li>
-            <a href="mailto:info@kontur-kostroma.ru" class="footer__link">
-              <span data-config="contacts.email">info@kontur-kostroma.ru</span>
-            </a>
-          </li>
-          <li><span class="footer__link" style="cursor: default;">г. Кострома и область</span></li>
-        </ul>
+      <div class="footer__right-col">
+        <p class="footer__nav-label">Навигация</p>
+        <nav class="footer__quick-nav" aria-label="Быстрая навигация">
+          <a href="#about"        class="footer__link">О нас</a>
+          <a href="#services"     class="footer__link">Услуги</a>
+          <a href="#portfolio"    class="footer__link">Работы</a>
+          <a href="#process"      class="footer__link">Процесс</a>
+          <a href="#contact"      class="footer__link">Контакты</a>
+        </nav>
 
         <div class="social-links" aria-label="Социальные сети">
           <a href="https://vk.com/kontur_kostroma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
@@ -661,13 +620,11 @@
               <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1.01-1.49-1.147-1.744-1.147-.356 0-.458.102-.458.593v1.575c0 .424-.136.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.864 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.253-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.762-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.491-.085.745-.576.745z"/>
             </svg>
           </a>
-
           <a href="https://t.me/kontur_kostroma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
             </svg>
           </a>
-
           <a href="https://wa.me/74942000000" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -678,6 +635,7 @@
 
     </div>
 
+    <!-- Нижняя строка: копирайт + юр. ссылки -->
     <div class="footer__bottom">
       <p class="footer__copy">
         © 2018–<span id="footer-year"></span> <span data-config="company.name">Контур</span>.
