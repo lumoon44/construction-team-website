@@ -475,6 +475,17 @@ function initLightbox() {
     if (e.key === "ArrowLeft") navigateLightbox(-1);
     if (e.key === "ArrowRight") navigateLightbox(1);
   });
+
+  // Touch swipe для мобиле
+  let lbTouchX = 0;
+  const imgWrap = lb.querySelector(".lightbox__img-wrap");
+  imgWrap?.addEventListener("touchstart", (e) => {
+    lbTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  imgWrap?.addEventListener("touchend", (e) => {
+    const diff = lbTouchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigateLightbox(diff > 0 ? 1 : -1);
+  }, { passive: true });
 }
 
 function openLightbox(index) {
