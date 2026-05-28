@@ -830,6 +830,18 @@ function initCases() {
     hint.className = "cases-hint";
     hint.innerHTML = `<div class="cases-hint__line"></div><span class="cases-hint__text">Scroll</span>`;
     sticky.appendChild(hint);
+
+    // Слайд-каунтер «01 / 03» (desktop only)
+    const count = document.createElement("div");
+    count.className = "cases-count";
+    count.id = "cases-count";
+    count.setAttribute("aria-live", "polite");
+    count.innerHTML = `
+      <span class="cases-count__current">01</span>
+      <span class="cases-count__sep">/</span>
+      <span class="cases-count__total">${String(n).padStart(2, "0")}</span>
+    `;
+    sticky.appendChild(count);
   }
 
   // Dots
@@ -850,6 +862,10 @@ function initCases() {
     currentCase = idx;
     slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
     dots?.forEach((d, i) => d.classList.toggle("is-active", i === idx));
+
+    // Обновляем десктопный каунтер
+    const cur = document.querySelector("#cases-count .cases-count__current");
+    if (cur) cur.textContent = String(idx + 1).padStart(2, "0");
   }
 
   function scrollToCase(idx) {

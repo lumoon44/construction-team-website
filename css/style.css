@@ -2213,6 +2213,45 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-weight: 500;
 }
 
+/* Slide counter — «01 / 03» (desktop only) */
+.cases-count {
+  position: absolute;
+  top: clamp(80px, 12vh, 140px);
+  left: var(--container-pad);
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  opacity: 0;
+  animation: fadeIn 1s 1.2s ease forwards;
+}
+
+.cases-count__current {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transition: color 0.35s ease;
+}
+
+.cases-count__sep {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(237, 232, 225, 0.2);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.cases-count__total {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(237, 232, 225, 0.2);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
 /* Mobile: stack cases in normal flow */
 @media (max-width: 768px) {
   .cases-sticky-wrap { height: auto !important; }
@@ -2246,6 +2285,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
   .cases-dots { display: none; }
   .cases-hint { display: none; }
+  .cases-count { display: none; }
 }
 
 /* ============================================================
