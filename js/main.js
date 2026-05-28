@@ -1,5 +1,5 @@
 /* ============================================================
-   КОНФИГ — всё меняется здесь и нигде больше
+   КОНФИГ
    ============================================================ */
 const SITE_CONFIG = {
   company: {
@@ -20,18 +20,16 @@ const SITE_CONFIG = {
     vk: "https://vk.com/kontur_kostroma",
   },
   colors: {
-    accentWarm: "#e8a020",
-    accentCold: "#4a9eff",
-    bg: "#0c0c0c",
-    bgCard: "#141414",
-    textPrimary: "#f0ede8",
-    textMuted: "#7a7672",
+    accentWarm: "#d97a1e",
+    bg: "#110e0b",
+    bgCard: "#161210",
+    textPrimary: "#ede8e1",
+    textMuted: "#6e6760",
   },
 };
 
 /* ============================================================
    ДАННЫЕ ПОРТФОЛИО
-   Замените src на реальные пути, когда добавите фото
    ============================================================ */
 const PORTFOLIO_ITEMS = [
   {
@@ -41,6 +39,7 @@ const PORTFOLIO_ITEMS = [
     description: "Янтарная грунтовая подсветка газона вдоль каменной стены. Создаёт тёплый акцент в вечернем ландшафте.",
     category: "Ландшафтное освещение",
     location: "Кострома, частный дом",
+    caseNum: "CASE 001",
   },
   {
     id: 2,
@@ -49,6 +48,7 @@ const PORTFOLIO_ITEMS = [
     description: "Тёплая подсветка колонн и перголы. Атмосфера средиземноморского вечера в центральной России.",
     category: "Архитектурная подсветка",
     location: "Костромская область",
+    caseNum: "CASE 002",
   },
   {
     id: 3,
@@ -57,6 +57,7 @@ const PORTFOLIO_ITEMS = [
     description: "Пурпурная и розовая подсветка деревьев у фасада. Ночной образ объекта, узнаваемый издалека.",
     category: "Архитектурное освещение",
     location: "Кострома, коммерческий объект",
+    caseNum: "CASE 003",
   },
 ];
 
@@ -65,30 +66,36 @@ const PORTFOLIO_ITEMS = [
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
   injectConfigData();
+  initCursor();
+  initProgressBar();
   initNavigation();
+  initHeaderScroll();
+  initSmoothScroll();
   initScrollReveal();
   initParallax();
+  initSplitText();
+  initMarquee();
   initPortfolio();
   initLightbox();
   initTestimonialsSlider();
   initContactForm();
-  initSmoothScroll();
-  initHeaderScroll();
+  initMagneticButtons();
+  initCounters();
 });
 
-/* Подставляем данные из конфига в DOM */
+/* ============================================================
+   INJECT CONFIG DATA
+   ============================================================ */
 function injectConfigData() {
   document.querySelectorAll("[data-config]").forEach((el) => {
-    const key = el.dataset.config;
-    const keys = key.split(".");
+    const keys = el.dataset.config.split(".");
     let val = SITE_CONFIG;
     for (const k of keys) val = val?.[k];
     if (val !== undefined) el.textContent = val;
   });
 
   document.querySelectorAll("[data-config-href]").forEach((el) => {
-    const key = el.dataset.configHref;
-    const keys = key.split(".");
+    const keys = el.dataset.configHref.split(".");
     let val = SITE_CONFIG;
     for (const k of keys) val = val?.[k];
     if (val !== undefined) el.href = val;
@@ -96,7 +103,77 @@ function injectConfigData() {
 }
 
 /* ============================================================
-   НАВИГАЦИЯ: мобильное меню
+   КАСТОМНЫЙ КУРСОР
+   ============================================================ */
+function initCursor() {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+  const cursor = document.getElementById("cursor");
+  const ring = document.getElementById("cursor-ring");
+  if (!cursor || !ring) return;
+
+  let mouseX = -100, mouseY = -100;
+  let ringX = -100, ringY = -100;
+  let rafId;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    rafId = requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const hoverTargets = "a, button, .portfolio-card, .service-card, .value-card, .messenger-btn";
+
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.closest(hoverTargets)) {
+      cursor.classList.add("is-hover");
+      ring.classList.add("is-hover");
+    }
+  });
+
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest(hoverTargets)) {
+      cursor.classList.remove("is-hover");
+      ring.classList.remove("is-hover");
+    }
+  });
+
+  document.addEventListener("mouseleave", () => {
+    cursor.style.opacity = "0";
+    ring.style.opacity = "0";
+  });
+
+  document.addEventListener("mouseenter", () => {
+    cursor.style.opacity = "1";
+    ring.style.opacity = "1";
+  });
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+function initProgressBar() {
+  const bar = document.getElementById("progress-bar");
+  if (!bar) return;
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = pct + "%";
+  }, { passive: true });
+}
+
+/* ============================================================
+   НАВИГАЦИЯ
    ============================================================ */
 function initNavigation() {
   const burger = document.getElementById("burger");
@@ -121,22 +198,45 @@ function initNavigation() {
 }
 
 /* ============================================================
-   ХЕДЕР: фон появляется при скролле
+   ХЕДЕР: hide on scroll down / show on scroll up
    ============================================================ */
 function initHeaderScroll() {
   const header = document.getElementById("header");
-  const threshold = 80;
+  if (!header) return;
+
+  let lastY = 0;
+  let ticking = false;
 
   const update = () => {
-    header?.classList.toggle("is-scrolled", window.scrollY > threshold);
+    const y = window.scrollY;
+    header.classList.toggle("is-scrolled", y > 60);
+
+    if (y > 120) {
+      if (y > lastY + 4) {
+        header.classList.add("is-hidden");
+      } else if (y < lastY - 4) {
+        header.classList.remove("is-hidden");
+      }
+    } else {
+      header.classList.remove("is-hidden");
+    }
+
+    lastY = y;
+    ticking = false;
   };
 
-  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
   update();
 }
 
 /* ============================================================
-   ПЛАВНЫЙ СКРОЛЛ к якорям
+   ПЛАВНЫЙ СКРОЛЛ
    ============================================================ */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
@@ -151,7 +251,7 @@ function initSmoothScroll() {
 }
 
 /* ============================================================
-   SCROLL REVEAL — Intersection Observer
+   SCROLL REVEAL
    ============================================================ */
 function initScrollReveal() {
   const items = document.querySelectorAll("[data-reveal]");
@@ -165,46 +265,93 @@ function initScrollReveal() {
         }
       });
     },
-    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
   );
 
-  items.forEach((el, i) => {
-    /* Задержка для элементов в одной строке */
-    const delay = el.dataset.revealDelay ?? i * 80;
+  items.forEach((el) => {
+    const delay = el.dataset.revealDelay ?? 0;
     el.style.transitionDelay = `${delay}ms`;
     observer.observe(el);
   });
 }
 
 /* ============================================================
-   ЛЁГКИЙ ПАРАЛЛАКС в Hero (CSS transform, не scroll-snap)
+   ПАРАЛЛАКС HERO
    ============================================================ */
 function initParallax() {
   const bg = document.querySelector(".hero__bg");
-  if (!bg) return;
-
-  /* Отключаем на мобильных для производительности */
-  if (window.matchMedia("(max-width: 768px)").matches) return;
+  if (!bg || window.matchMedia("(max-width: 768px)").matches) return;
 
   let ticking = false;
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const y = window.scrollY * 0.35;
-          bg.style.transform = `translate3d(0, ${y}px, 0) scale(1.1)`;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    },
-    { passive: true }
-  );
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY * 0.3;
+        bg.style.transform = `translate3d(0, ${y}px, 0) scale(1.1)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 /* ============================================================
-   ПОРТФОЛИО — рендер карточек из массива
+   SPLIT-TEXT HERO
+   ============================================================ */
+function initSplitText() {
+  const title = document.getElementById("hero-title");
+  if (!title) return;
+
+  /* Собираем текстовые узлы и сохраняем структуру */
+  const html = title.innerHTML;
+
+  /* Разбиваем каждую строку на слова */
+  title.innerHTML = html.replace(/([^\s<>]+)/g, (word) => {
+    if (word.startsWith('<') || word.startsWith('>')) return word;
+    return `<span class="split-word"><span class="split-word-inner">${word}</span></span>`;
+  });
+
+  const inners = title.querySelectorAll(".split-word-inner");
+
+  /* Задержка по порядку */
+  setTimeout(() => {
+    inners.forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add("is-visible");
+      }, i * 80 + 600);
+    });
+  }, 100);
+}
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+function initMarquee() {
+  const track = document.getElementById("marquee-track");
+  if (!track) return;
+
+  const items = [
+    "Благоустройство территорий",
+    "Ландшафтное освещение",
+    "Архитектурная подсветка",
+    "Кострома",
+    "Костромская область",
+    "Террасы и беседки",
+    "Заборы и ограждения",
+    "Под ключ · с 2018",
+    "Гарантия 3 года",
+    "Бесплатный замер",
+  ];
+
+  /* Дублируем для бесшовного loop */
+  const doubled = [...items, ...items];
+  track.innerHTML = doubled
+    .map((t) => `<span class="marquee-item">${t}</span>`)
+    .join("");
+}
+
+/* ============================================================
+   ПОРТФОЛИО
    ============================================================ */
 function initPortfolio() {
   const grid = document.getElementById("portfolio-grid");
@@ -213,15 +360,16 @@ function initPortfolio() {
   PORTFOLIO_ITEMS.forEach((item, idx) => {
     const card = document.createElement("article");
     card.className = "portfolio-card";
-    card.setAttribute("data-reveal", "");
-    card.setAttribute("data-reveal-delay", idx * 120);
+    card.setAttribute("data-clip-reveal", "");
     card.setAttribute("data-index", idx);
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
     card.setAttribute("aria-label", `Открыть проект: ${item.title}`);
 
+    const caseLabel = String(idx + 1).padStart(3, "0");
+
     card.innerHTML = `
-      <div class="portfolio-card__img-wrap">
+      <div class="portfolio-card__img-wrap" data-case="${item.caseNum}">
         <img
           class="portfolio-card__img"
           src="${item.src}"
@@ -230,6 +378,7 @@ function initPortfolio() {
           onerror="this.closest('.portfolio-card__img-wrap').classList.add('placeholder')"
         />
         <div class="portfolio-card__overlay">
+          <span class="portfolio-card__case">${item.caseNum}</span>
           <span class="portfolio-card__cat">${item.category}</span>
           <h3 class="portfolio-card__title">${item.title}</h3>
           <span class="portfolio-card__location">${item.location}</span>
@@ -245,20 +394,23 @@ function initPortfolio() {
     grid.appendChild(card);
   });
 
-  /* Повторно инициализируем reveal для динамически добавленных карточек */
-  const newItems = grid.querySelectorAll("[data-reveal]");
+  /* Clip-path reveal с задержкой */
+  const cards = grid.querySelectorAll("[data-clip-reveal]");
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("is-revealed");
+          setTimeout(() => {
+            entry.target.classList.add("is-revealed");
+          }, parseInt(entry.target.dataset.index) * 150);
           observer.unobserve(entry.target);
         }
       });
     },
     { threshold: 0.1 }
   );
-  newItems.forEach((el) => observer.observe(el));
+
+  cards.forEach((el) => observer.observe(el));
 }
 
 /* ============================================================
@@ -289,8 +441,7 @@ function initLightbox() {
 function openLightbox(index) {
   lightboxCurrentIndex = index;
   renderLightboxSlide();
-  const lb = document.getElementById("lightbox");
-  lb?.classList.add("is-open");
+  document.getElementById("lightbox")?.classList.add("is-open");
   document.body.classList.add("lb-open");
   document.getElementById("lb-close")?.focus();
 }
@@ -301,8 +452,7 @@ function closeLightbox() {
 }
 
 function navigateLightbox(dir) {
-  lightboxCurrentIndex =
-    (lightboxCurrentIndex + dir + PORTFOLIO_ITEMS.length) % PORTFOLIO_ITEMS.length;
+  lightboxCurrentIndex = (lightboxCurrentIndex + dir + PORTFOLIO_ITEMS.length) % PORTFOLIO_ITEMS.length;
   renderLightboxSlide();
 }
 
@@ -313,14 +463,10 @@ function renderLightboxSlide() {
   const desc = document.getElementById("lb-desc");
   const counter = document.getElementById("lb-counter");
 
-  if (img) {
-    img.src = item.src;
-    img.alt = item.title;
-  }
+  if (img) { img.src = item.src; img.alt = item.title; }
   if (caption) caption.textContent = item.title;
   if (desc) desc.textContent = item.description;
-  if (counter)
-    counter.textContent = `${lightboxCurrentIndex + 1} / ${PORTFOLIO_ITEMS.length}`;
+  if (counter) counter.textContent = `${lightboxCurrentIndex + 1} / ${PORTFOLIO_ITEMS.length}`;
 }
 
 /* ============================================================
@@ -355,7 +501,6 @@ function initTestimonialsSlider() {
   let current = 0;
   let autoTimer;
 
-  /* Рендер слайдов */
   TESTIMONIALS.forEach((t) => {
     const stars = "★".repeat(t.rating) + "☆".repeat(5 - t.rating);
     const slide = document.createElement("div");
@@ -371,7 +516,6 @@ function initTestimonialsSlider() {
     track.appendChild(slide);
   });
 
-  /* Точки навигации */
   TESTIMONIALS.forEach((_, i) => {
     const dot = document.createElement("button");
     dot.className = "testimonial-dot";
@@ -388,17 +532,9 @@ function initTestimonialsSlider() {
     dots?.forEach((d, i) => d.classList.toggle("is-active", i === current));
   }
 
-  function next() {
-    goTo((current + 1) % TESTIMONIALS.length);
-  }
-
-  function startAuto() {
-    autoTimer = setInterval(next, 5000);
-  }
-
-  function stopAuto() {
-    clearInterval(autoTimer);
-  }
+  function next() { goTo((current + 1) % TESTIMONIALS.length); }
+  function startAuto() { autoTimer = setInterval(next, 5000); }
+  function stopAuto() { clearInterval(autoTimer); }
 
   document.getElementById("testimonials-prev")?.addEventListener("click", () => {
     stopAuto();
@@ -415,26 +551,23 @@ function initTestimonialsSlider() {
   goTo(0);
   startAuto();
 
-  /* Пауза при ховере */
   track.parentElement?.addEventListener("mouseenter", stopAuto);
   track.parentElement?.addEventListener("mouseleave", startAuto);
 }
 
 /* ============================================================
-   КОНТАКТНАЯ ФОРМА — валидация + имитация отправки
-   Для подключения API: замените тело функции submitForm
+   КОНТАКТНАЯ ФОРМА
    ============================================================ */
 function initContactForm() {
   const form = document.getElementById("contact-form");
   if (!form) return;
 
   const fields = {
-    name: { el: form.querySelector('[name="name"]'), min: 2 },
-    phone: { el: form.querySelector('[name="phone"]'), pattern: /^[\d\s\+\-\(\)]{10,}$/ },
+    name:    { el: form.querySelector('[name="name"]'),    min: 2 },
+    phone:   { el: form.querySelector('[name="phone"]'),   pattern: /^[\d\s\+\-\(\)]{10,}$/ },
     message: { el: form.querySelector('[name="message"]'), min: 10 },
   };
 
-  /* Живая валидация полей */
   Object.values(fields).forEach(({ el }) => {
     el?.addEventListener("blur", () => validateField(el));
     el?.addEventListener("input", () => {
@@ -452,13 +585,12 @@ function initContactForm() {
   function validateField(el) {
     if (!el) return true;
     const wrap = el.closest(".field");
-    const name = el.name;
     const val = el.value.trim();
     let error = "";
 
-    if (name === "name" && val.length < 2) error = "Введите ваше имя";
-    if (name === "phone" && !/^[\d\s\+\-\(\)]{10,}$/.test(val)) error = "Введите корректный номер";
-    if (name === "message" && val.length < 10) error = "Сообщение слишком короткое";
+    if (el.name === "name" && val.length < 2) error = "Введите ваше имя";
+    if (el.name === "phone" && !/^[\d\s\+\-\(\)]{10,}$/.test(val)) error = "Введите корректный номер";
+    if (el.name === "message" && val.length < 10) error = "Сообщение слишком короткое";
 
     wrap?.classList.toggle("has-error", !!error);
     wrap?.classList.toggle("is-valid", !error && val.length > 0);
@@ -468,10 +600,6 @@ function initContactForm() {
     return !error;
   }
 
-  /*
-   * Для подключения API: замените console.log на fetch/axios вызов
-   * Например: return fetch('/api/contact', { method: 'POST', body: data })
-   */
   function submitForm(data) {
     const btn = form.querySelector('[type="submit"]');
     const status = document.getElementById("form-status");
@@ -481,7 +609,6 @@ function initContactForm() {
 
     console.log("Форма отправлена:", Object.fromEntries(data));
 
-    /* Имитация запроса к API */
     setTimeout(() => {
       btn.disabled = false;
       btn.classList.remove("is-loading");
@@ -496,4 +623,64 @@ function initContactForm() {
       }
     }, 1200);
   }
+}
+
+/* ============================================================
+   MAGNETIC BUTTONS
+   ============================================================ */
+function initMagneticButtons() {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+  document.querySelectorAll(".magnetic-btn").forEach((btn) => {
+    btn.addEventListener("mousemove", (e) => {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.35;
+      const dy = (e.clientY - cy) * 0.35;
+      btn.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+
+    btn.addEventListener("mouseleave", () => {
+      btn.style.transform = "";
+    });
+  });
+}
+
+/* ============================================================
+   NUMBER COUNTERS
+   ============================================================ */
+function initCounters() {
+  const counters = document.querySelectorAll("[data-counter]");
+  if (!counters.length) return;
+
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+
+        const el = entry.target;
+        const target = parseInt(el.dataset.counter, 10);
+        const suffix = el.dataset.suffix || "";
+        const duration = 1600;
+        const start = performance.now();
+
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const value = Math.round(easeOut(progress) * target);
+          el.textContent = value + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  counters.forEach((el) => observer.observe(el));
 }

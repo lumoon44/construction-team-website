@@ -4,20 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Контур — строительная бригада из Костромы. Благоустройство территорий, ландшафтное освещение, архитектурная подсветка. Строим пространство, в котором хочется жить." />
-  <meta name="theme-color" content="#0c0c0c" />
+  <meta name="theme-color" content="#110e0b" />
 
-  <!-- Open Graph -->
   <meta property="og:title" content="Контур — благоустройство и освещение в Костроме" />
   <meta property="og:description" content="Строим пространство, в котором хочется жить." />
   <meta property="og:type" content="website" />
 
   <title>Контур — благоустройство и освещение в Костроме</title>
 
-  <!-- Google Fonts: Cormorant Garamond (display) + Inter (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
 
@@ -25,8 +23,19 @@
 </head>
 <body>
 
+<!-- Grain overlay -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+
+
 <!-- ============================================================
-     ХЕДЕР / НАВИГАЦИЯ
+     ХЕДЕР
      ============================================================ -->
 <header class="header" id="header" role="banner">
   <div class="container">
@@ -34,7 +43,7 @@
 
       <a href="#hero" class="logo" aria-label="Контур — на главную">
         <span class="logo__name">Конт<span>ур</span></span>
-        <span class="logo__sub">Кострома · с 2018</span>
+        <span class="logo__sub">Кострома · Est. 2018</span>
       </a>
 
       <nav id="nav-menu" class="nav__menu" aria-label="Основная навигация">
@@ -43,7 +52,7 @@
         <a href="#portfolio" class="nav__link">Работы</a>
         <a href="#process"  class="nav__link">Процесс</a>
         <a href="#contact"  class="nav__link">Контакты</a>
-        <a href="#contact" class="btn btn--outline" style="padding: 0.6rem 1.2rem;">Обсудить проект</a>
+        <a href="#contact" class="btn btn--outline" style="padding: 0.55rem 1.2rem; font-size: 11px;">Обсудить проект</a>
       </nav>
 
       <button
@@ -68,14 +77,20 @@
      ============================================================ -->
 <section class="hero" id="hero" aria-label="Главная секция">
 
-  <!-- Фоновое фото (заменяется через background-image в CSS или атрибут style) -->
   <div class="hero__bg" role="img" aria-label="Пример архитектурной подсветки у бассейна"></div>
+
+  <!-- Координаты-декор -->
+  <div class="hero__coord" aria-hidden="true">
+    <span class="hero__coord-line"><span>57.767° N</span></span>
+    <span class="hero__coord-line"><span>40.926° E</span></span>
+    <span class="hero__coord-line">Кострома, Россия</span>
+  </div>
 
   <div class="container">
     <div class="hero__content">
-      <p class="hero__eyebrow">Строительная бригада · Кострома</p>
+      <p class="hero__eyebrow">Строительная бригада · Кострома · с 2018</p>
 
-      <h1 class="hero__title">
+      <h1 class="hero__title" id="hero-title">
         Строим<br>
         <em>пространство</em>,<br>
         в котором<br>хочется жить
@@ -87,15 +102,15 @@
       </p>
 
       <div class="hero__actions">
-        <a href="#contact" class="btn btn--primary">
+        <a href="#contact" class="btn btn--primary magnetic-btn">
           Обсудить проект
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
         <a href="#portfolio" class="btn btn--ghost">
           Смотреть работы
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
@@ -103,13 +118,29 @@
     </div>
   </div>
 
-  <!-- Индикатор прокрутки -->
+  <!-- CASE маркер -->
+  <div class="hero__case" aria-hidden="true">
+    <span class="hero__case-num">— EST. 2018</span>
+    <div class="hero__case-line"></div>
+  </div>
+
+  <!-- Scroll indicator -->
   <div class="hero__scroll" aria-hidden="true">
     <div class="hero__scroll-line"></div>
     <span class="hero__scroll-text">Scroll</span>
   </div>
 
 </section>
+
+
+<!-- ============================================================
+     MARQUEE STRIP
+     ============================================================ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track">
+    <!-- Дублируем для бесшовного loop — генерируется через JS -->
+  </div>
+</div>
 
 
 <!-- ============================================================
@@ -120,14 +151,14 @@
 
     <div class="about__grid">
 
-      <!-- Левая колонка: текст -->
       <div>
-        <p class="section-label" data-reveal>О нас</p>
-        <h2 class="section-title" id="about-title" data-reveal data-reveal-delay="80">
+        <p class="section-index" data-reveal>001 / О бригаде</p>
+        <p class="section-label" data-reveal data-reveal-delay="40">О нас</p>
+        <h2 class="section-title" id="about-title" data-reveal data-reveal-delay="100">
           Местная команда,<br>которой доверяют
         </h2>
 
-        <div data-reveal data-reveal-delay="160">
+        <div data-reveal data-reveal-delay="180">
           <p>
             Мы — бригада мастеров из Костромы, специализирующихся на
             комплексном благоустройстве: от ландшафтного дизайна и мощения
@@ -141,27 +172,25 @@
           </p>
         </div>
 
-        <!-- Цифры -->
-        <div class="about__stat-grid" data-reveal data-reveal-delay="240">
+        <div class="about__stat-grid" data-reveal data-reveal-delay="260">
           <div class="stat-card">
-            <span class="stat-card__num">6+</span>
+            <span class="stat-card__num" data-counter="6" data-suffix="+">6+</span>
             <span class="stat-card__label">лет на рынке</span>
           </div>
           <div class="stat-card">
-            <span class="stat-card__num">120+</span>
+            <span class="stat-card__num" data-counter="120" data-suffix="+">120+</span>
             <span class="stat-card__label">объектов сдано</span>
           </div>
           <div class="stat-card">
-            <span class="stat-card__num">100%</span>
+            <span class="stat-card__num" data-counter="100" data-suffix="%">100%</span>
             <span class="stat-card__label">гарантия качества</span>
           </div>
         </div>
       </div>
 
-      <!-- Правая колонка: карточки ценностей -->
       <div class="values-grid" aria-label="Наши ценности">
 
-        <div class="value-card" data-reveal data-reveal-delay="100">
+        <div class="value-card" data-reveal data-reveal-delay="80">
           <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -169,7 +198,7 @@
           <p class="value-card__text">Работаем только с проверенными производителями светотехники и строительных материалов.</p>
         </div>
 
-        <div class="value-card" data-reveal data-reveal-delay="180">
+        <div class="value-card" data-reveal data-reveal-delay="160">
           <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -177,7 +206,7 @@
           <p class="value-card__text">Составляем реалистичный график и строго его придерживаемся. Штрафные санкции прописываем в договоре.</p>
         </div>
 
-        <div class="value-card" data-reveal data-reveal-delay="260">
+        <div class="value-card" data-reveal data-reveal-delay="240">
           <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -185,7 +214,7 @@
           <p class="value-card__text">На выполненные работы и установленное оборудование даём письменную гарантию 3 года.</p>
         </div>
 
-        <div class="value-card" data-reveal data-reveal-delay="340">
+        <div class="value-card" data-reveal data-reveal-delay="320">
           <svg class="value-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"/>
@@ -207,12 +236,13 @@
 <section class="section section--alt" id="services" aria-labelledby="services-title">
   <div class="container">
 
-    <div style="max-width: 560px;">
-      <p class="section-label" data-reveal>Услуги</p>
-      <h2 class="section-title" id="services-title" data-reveal data-reveal-delay="80">
+    <div style="max-width: 580px;">
+      <p class="section-index" data-reveal>002 / Услуги</p>
+      <p class="section-label" data-reveal data-reveal-delay="40">Услуги</p>
+      <h2 class="section-title" id="services-title" data-reveal data-reveal-delay="100">
         Что мы делаем
       </h2>
-      <p class="section-subtitle" data-reveal data-reveal-delay="160">
+      <p class="section-subtitle" data-reveal data-reveal-delay="180">
         Полный цикл: проект, материалы, монтаж, сдача объекта.
         Работаем комплексно или по отдельным направлениям.
       </p>
@@ -220,7 +250,6 @@
 
     <div class="services__grid">
 
-      <!-- Карточка 1 -->
       <article class="service-card" data-reveal data-reveal-delay="60">
         <span class="service-card__num">01</span>
         <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -237,7 +266,6 @@
         <span class="service-card__tag">Под ключ</span>
       </article>
 
-      <!-- Карточка 2 -->
       <article class="service-card" data-reveal data-reveal-delay="120">
         <span class="service-card__num">02</span>
         <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -254,7 +282,6 @@
         <span class="service-card__tag">Популярно</span>
       </article>
 
-      <!-- Карточка 3 -->
       <article class="service-card" data-reveal data-reveal-delay="180">
         <span class="service-card__num">03</span>
         <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -271,7 +298,6 @@
         <span class="service-card__tag">Авторский дизайн</span>
       </article>
 
-      <!-- Карточка 4 -->
       <article class="service-card" data-reveal data-reveal-delay="240">
         <span class="service-card__num">04</span>
         <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -288,7 +314,6 @@
         <span class="service-card__tag">Проект + монтаж</span>
       </article>
 
-      <!-- Карточка 5 -->
       <article class="service-card" data-reveal data-reveal-delay="300">
         <span class="service-card__num">05</span>
         <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -320,17 +345,17 @@
 
     <div class="portfolio__header">
       <div>
-        <p class="section-label" data-reveal>Работы</p>
-        <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="80">
+        <p class="section-index" data-reveal>003 / Работы</p>
+        <p class="section-label" data-reveal data-reveal-delay="40">Работы</p>
+        <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="100">
           Примеры наших объектов
         </h2>
       </div>
-      <p class="section-subtitle" data-reveal data-reveal-delay="120" style="max-width: 32ch; text-align: right;">
+      <p class="section-subtitle" data-reveal data-reveal-delay="120" style="max-width: 28ch; text-align: right;">
         Нажмите на карточку, чтобы увидеть проект подробнее
       </p>
     </div>
 
-    <!-- Карточки генерируются через JS из массива PORTFOLIO_ITEMS -->
     <div class="portfolio-grid" id="portfolio-grid" role="list" aria-label="Галерея работ">
     </div>
 
@@ -344,9 +369,10 @@
 <section class="section section--alt" id="process" aria-labelledby="process-title">
   <div class="container">
 
-    <div style="text-align: center; max-width: 520px; margin-inline: auto;">
-      <p class="section-label" style="justify-content: center;" data-reveal>Как мы работаем</p>
-      <h2 class="section-title" id="process-title" data-reveal data-reveal-delay="80">
+    <div style="text-align: center; max-width: 540px; margin-inline: auto;">
+      <p class="section-index" style="justify-content: center;" data-reveal>004 / Процесс</p>
+      <p class="section-label" style="justify-content: center;" data-reveal data-reveal-delay="40">Как мы работаем</p>
+      <h2 class="section-title" id="process-title" data-reveal data-reveal-delay="100">
         Четыре шага от идеи до результата
       </h2>
     </div>
@@ -402,14 +428,14 @@
   <div class="container">
 
     <div style="max-width: 480px; margin-bottom: var(--space-12);">
-      <p class="section-label" data-reveal>Отзывы</p>
-      <h2 class="section-title" id="testimonials-title" data-reveal data-reveal-delay="80">
+      <p class="section-index" data-reveal>005 / Отзывы</p>
+      <p class="section-label" data-reveal data-reveal-delay="40">Отзывы</p>
+      <h2 class="section-title" id="testimonials-title" data-reveal data-reveal-delay="100">
         Говорят наши клиенты
       </h2>
     </div>
 
     <div class="testimonials__wrap" data-reveal>
-      <!-- Слайды генерируются через JS из массива TESTIMONIALS -->
       <div class="testimonials-track" id="testimonials-track" role="list" aria-label="Отзывы клиентов">
       </div>
 
@@ -441,12 +467,13 @@
 <section class="section section--alt" id="contact" aria-labelledby="contact-title">
   <div class="container">
 
-    <div style="max-width: 520px; margin-bottom: var(--space-4);">
-      <p class="section-label" data-reveal>Контакты</p>
-      <h2 class="section-title" id="contact-title" data-reveal data-reveal-delay="80">
+    <div style="max-width: 540px; margin-bottom: var(--space-4);">
+      <p class="section-index" data-reveal>006 / Контакты</p>
+      <p class="section-label" data-reveal data-reveal-delay="40">Контакты</p>
+      <h2 class="section-title" id="contact-title" data-reveal data-reveal-delay="100">
         Обсудим ваш проект
       </h2>
-      <p class="section-subtitle" data-reveal data-reveal-delay="160">
+      <p class="section-subtitle" data-reveal data-reveal-delay="180">
         Оставьте заявку — ответим в течение 2 часов и бесплатно
         выедем на замер.
       </p>
@@ -454,7 +481,6 @@
 
     <div class="contacts__grid">
 
-      <!-- Контактная информация -->
       <div class="contacts__info" data-reveal>
 
         <div class="contact-item">
@@ -479,39 +505,21 @@
         <div class="contact-item">
           <span class="contact-item__label">Написать в мессенджер</span>
           <div class="messengers">
-            <a
-              href="https://wa.me/74942000000"
-              class="messenger-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-            >
+            <a href="https://wa.me/74942000000" class="messenger-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
               WhatsApp
             </a>
 
-            <a
-              href="https://t.me/kontur_kostroma"
-              class="messenger-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Telegram"
-            >
+            <a href="https://t.me/kontur_kostroma" class="messenger-btn" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
               </svg>
               Telegram
             </a>
 
-            <a
-              href="https://vk.com/kontur_kostroma"
-              class="messenger-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ВКонтакте"
-            >
+            <a href="https://vk.com/kontur_kostroma" class="messenger-btn" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1.01-1.49-1.147-1.744-1.147-.356 0-.458.102-.458.593v1.575c0 .424-.136.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.864 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.253-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.762-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.491-.085.745-.576.745z"/>
               </svg>
@@ -523,30 +531,19 @@
         <div class="contact-item">
           <span class="contact-item__label">Режим работы</span>
           <span class="contact-item__value">Пн–Пт: 9:00–18:00</span>
-          <span style="font-size: var(--size-sm); color: var(--color-text-muted);">В выходные отвечаем на сообщения</span>
+          <span style="font-size: var(--size-sm); color: var(--color-text-muted); font-weight: 300;">В выходные отвечаем на сообщения</span>
         </div>
 
       </div>
 
-      <!-- Форма обратной связи -->
-      <form
-        class="contact-form"
-        id="contact-form"
-        novalidate
-        aria-label="Форма для связи"
-      >
+      <form class="contact-form" id="contact-form" novalidate aria-label="Форма для связи">
 
         <div class="field">
           <label class="field__label" for="field-name">Ваше имя</label>
           <input
-            type="text"
-            id="field-name"
-            name="name"
-            class="field__input"
-            placeholder="Как вас зовут?"
-            autocomplete="given-name"
-            required
-            aria-required="true"
+            type="text" id="field-name" name="name" class="field__input"
+            placeholder="Как вас зовут?" autocomplete="given-name"
+            required aria-required="true"
           />
           <span class="field__error" role="alert" aria-live="polite"></span>
         </div>
@@ -554,14 +551,9 @@
         <div class="field">
           <label class="field__label" for="field-phone">Телефон</label>
           <input
-            type="tel"
-            id="field-phone"
-            name="phone"
-            class="field__input"
-            placeholder="+7 (___) ___-__-__"
-            autocomplete="tel"
-            required
-            aria-required="true"
+            type="tel" id="field-phone" name="phone" class="field__input"
+            placeholder="+7 (___) ___-__-__" autocomplete="tel"
+            required aria-required="true"
           />
           <span class="field__error" role="alert" aria-live="polite"></span>
         </div>
@@ -569,25 +561,20 @@
         <div class="field">
           <label class="field__label" for="field-message">Расскажите о проекте</label>
           <textarea
-            id="field-message"
-            name="message"
-            class="field__input"
-            rows="4"
-            placeholder="Что планируете: тип объекта, площадь, пожелания..."
-            required
-            aria-required="true"
+            id="field-message" name="message" class="field__input"
+            rows="4" placeholder="Что планируете: тип объекта, площадь, пожелания..."
+            required aria-required="true"
           ></textarea>
           <span class="field__error" role="alert" aria-live="polite"></span>
         </div>
 
         <div>
-          <button type="submit" class="btn btn--primary" style="width: 100%; justify-content: center;">
+          <button type="submit" class="btn btn--primary magnetic-btn" style="width: 100%; justify-content: center;">
             Отправить заявку
           </button>
           <p class="form-note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
         </div>
 
-        <!-- Статус успешной отправки -->
         <div class="form-status" id="form-status" role="status" aria-live="polite">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" fill="currentColor"/>
@@ -610,11 +597,10 @@
 
     <div class="footer__inner">
 
-      <!-- Бренд -->
       <div>
         <a href="#hero" class="logo" aria-label="Контур — на главную">
           <span class="logo__name">Конт<span>ур</span></span>
-          <span class="logo__sub">Кострома · с 2018</span>
+          <span class="logo__sub">Кострома · Est. 2018</span>
         </a>
         <p class="footer__brand-desc">
           Строительная бригада из Костромы. Благоустройство
@@ -623,7 +609,6 @@
         </p>
       </div>
 
-      <!-- Навигация -->
       <div>
         <p class="footer__col-title">Разделы</p>
         <ul class="footer__links">
@@ -636,7 +621,6 @@
         </ul>
       </div>
 
-      <!-- Услуги -->
       <div>
         <p class="footer__col-title">Услуги</p>
         <ul class="footer__links">
@@ -648,7 +632,6 @@
         </ul>
       </div>
 
-      <!-- Соцсети и контакты -->
       <div>
         <p class="footer__col-title">Связаться</p>
         <ul class="footer__links" style="margin-bottom: var(--space-6);">
@@ -666,37 +649,19 @@
         </ul>
 
         <div class="social-links" aria-label="Социальные сети">
-          <a
-            href="https://vk.com/kontur_kostroma"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="ВКонтакте"
-          >
+          <a href="https://vk.com/kontur_kostroma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1.01-1.49-1.147-1.744-1.147-.356 0-.458.102-.458.593v1.575c0 .424-.136.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.864 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.253-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.762-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.491-.085.745-.576.745z"/>
             </svg>
           </a>
 
-          <a
-            href="https://t.me/kontur_kostroma"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Telegram"
-          >
+          <a href="https://t.me/kontur_kostroma" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
             </svg>
           </a>
 
-          <a
-            href="https://wa.me/74942000000"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp"
-          >
+          <a href="https://wa.me/74942000000" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -706,7 +671,6 @@
 
     </div>
 
-    <!-- Нижняя строка -->
     <div class="footer__bottom">
       <p class="footer__copy">
         © 2018–<span id="footer-year"></span> <span data-config="company.name">Контур</span>.
@@ -722,16 +686,8 @@
 </footer>
 
 
-<!-- ============================================================
-     ЛАЙТБОКС
-     ============================================================ -->
-<div
-  class="lightbox"
-  id="lightbox"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Просмотр работы"
->
+<!-- ЛАЙТБОКС -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр работы">
   <button class="lb-close" id="lb-close" aria-label="Закрыть">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
       <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -768,7 +724,6 @@
 
 <script src="js/main.js"></script>
 <script>
-  /* Текущий год в копирайте */
   document.getElementById('footer-year').textContent = new Date().getFullYear();
 </script>
 
