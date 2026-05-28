@@ -135,7 +135,7 @@ function initCursor() {
   }
   animateRing();
 
-  const hoverTargets = "a, button, .portfolio-card, .service-card, .value-card, .messenger-btn";
+  const hoverTargets = "a, button, .portfolio-card, .service-card, .value-card, .messenger-btn, .case-slide";
 
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(hoverTargets)) {
@@ -475,6 +475,17 @@ function initLightbox() {
     if (e.key === "ArrowLeft") navigateLightbox(-1);
     if (e.key === "ArrowRight") navigateLightbox(1);
   });
+
+  // Touch swipe для мобиле
+  let lbTouchX = 0;
+  const imgWrap = lb.querySelector(".lightbox__img-wrap");
+  imgWrap?.addEventListener("touchstart", (e) => {
+    lbTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  imgWrap?.addEventListener("touchend", (e) => {
+    const diff = lbTouchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigateLightbox(diff > 0 ? 1 : -1);
+  }, { passive: true });
 }
 
 function openLightbox(index) {
@@ -502,7 +513,25 @@ function renderLightboxSlide() {
   const desc = document.getElementById("lb-desc");
   const counter = document.getElementById("lb-counter");
 
-  if (img) { img.src = item.src; img.alt = item.title; }
+  if (img) {
+    img.style.display = "block";
+    img.src = item.src;
+    img.alt = item.title;
+    img.onerror = () => {
+      // Фото нет — скрываем тег <img>, показываем тёмный фон-заглушку
+      img.style.display = "none";
+      const wrap = img.closest(".lightbox__img-wrap");
+      if (wrap && !wrap.querySelector(".lb-no-img")) {
+        const placeholder = document.createElement("div");
+        placeholder.className = "lb-no-img";
+        placeholder.innerHTML = `<span>${item.caseNum}</span>`;
+        wrap.insertBefore(placeholder, img);
+      }
+    };
+    // Убираем старую заглушку при переключении слайдов
+    const oldPlaceholder = img.closest(".lightbox__img-wrap")?.querySelector(".lb-no-img");
+    if (oldPlaceholder) oldPlaceholder.remove();
+  }
   if (caption) caption.textContent = item.title;
   if (desc) desc.textContent = item.description;
   if (counter) counter.textContent = `${lightboxCurrentIndex + 1} / ${PORTFOLIO_ITEMS.length}`;
@@ -734,6 +763,16 @@ function initPageIntro() {
 /* ============================================================
    FULLSCREEN CASES — sticky scroll storytelling
    ============================================================ */
+// Цветовые темы для ambient glow каждого кейса
+const CASE_THEMES = [
+  // CASE 001 — Ландшафтное освещение: тёплый янтарь
+  { c1: "rgba(217,122,30,0.55)",  c2: "rgba(245,176,55,0.30)", dur1: "15s", dur2: "21s" },
+  // CASE 002 — Архитектурная подсветка: cream + amber
+  { c1: "rgba(237,232,225,0.20)", c2: "rgba(217,122,30,0.28)", dur1: "19s", dur2: "25s" },
+  // CASE 003 — Подсветка деревьев: пурпур + маджента
+  { c1: "rgba(139,92,246,0.45)",  c2: "rgba(220,60,240,0.28)", dur1: "13s", dur2: "18s" },
+];
+
 function initCases() {
   const wrap   = document.getElementById("cases-sticky-wrap");
   const sticky = document.getElementById("cases-sticky");
@@ -750,10 +789,19 @@ function initCases() {
 
   // Рендерим слайды
   PORTFOLIO_ITEMS.forEach((item, idx) => {
+    const theme = CASE_THEMES[idx] || CASE_THEMES[0];
     const slide = document.createElement("div");
     slide.className = "case-slide" + (idx === 0 ? " is-active" : "");
     slide.setAttribute("role", "article");
     slide.setAttribute("aria-label", item.title);
+
+    // Инлайн CSS-переменные для уникального glow каждого кейса
+    slide.style.cssText = `
+      --glow-c1: ${theme.c1};
+      --glow-c2: ${theme.c2};
+      --glow-dur1: ${theme.dur1};
+      --glow-dur2: ${theme.dur2};
+    `;
 
     slide.innerHTML = `
       <div class="case-slide__bg">
@@ -764,6 +812,11 @@ function initCases() {
           loading="${idx === 0 ? "eager" : "lazy"}"
           onerror="this.style.display='none'"
         />
+        <div class="case-slide__glow" aria-hidden="true">
+          <span class="case-slide__glow-blob case-slide__glow-blob--a"></span>
+          <span class="case-slide__glow-blob case-slide__glow-blob--b"></span>
+          <span class="case-slide__glow-blob case-slide__glow-blob--c"></span>
+        </div>
         <div class="case-slide__overlay"></div>
       </div>
       <div class="case-slide__meta-top">
@@ -788,6 +841,18 @@ function initCases() {
     hint.className = "cases-hint";
     hint.innerHTML = `<div class="cases-hint__line"></div><span class="cases-hint__text">Scroll</span>`;
     sticky.appendChild(hint);
+
+    // Слайд-каунтер «01 / 03» (desktop only)
+    const count = document.createElement("div");
+    count.className = "cases-count";
+    count.id = "cases-count";
+    count.setAttribute("aria-live", "polite");
+    count.innerHTML = `
+      <span class="cases-count__current">01</span>
+      <span class="cases-count__sep">/</span>
+      <span class="cases-count__total">${String(n).padStart(2, "0")}</span>
+    `;
+    sticky.appendChild(count);
   }
 
   // Dots
@@ -808,6 +873,10 @@ function initCases() {
     currentCase = idx;
     slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
     dots?.forEach((d, i) => d.classList.toggle("is-active", i === idx));
+
+    // Обновляем десктопный каунтер
+    const cur = document.querySelector("#cases-count .cases-count__current");
+    if (cur) cur.textContent = String(idx + 1).padStart(2, "0");
   }
 
   function scrollToCase(idx) {
@@ -825,20 +894,43 @@ function initCases() {
       if (rafId) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
-        const rect     = wrap.getBoundingClientRect();
-        const vh       = window.innerHeight;
+        const rect       = wrap.getBoundingClientRect();
+        const vh         = window.innerHeight;
         const scrollable = wrap.offsetHeight - vh;
         if (scrollable <= 0) return;
 
-        // sticky не зафиксирован ещё или уже вышел
-        if (rect.top > 0 || rect.bottom < vh) return;
+        // Ещё не вошли — первый кейс
+        if (rect.top > 0) return;
 
-        const scrolled  = -rect.top;
-        const progress  = Math.max(0, Math.min(1, scrolled / scrollable));
-        const idx       = Math.min(Math.floor(progress * n), n - 1);
+        // Уже вышли из sticky-зоны — фиксируем последний кейс
+        if (rect.bottom < vh) {
+          setCase(n - 1);
+          return;
+        }
+
+        const scrolled = -rect.top;
+        const progress = Math.max(0, Math.min(1, scrolled / scrollable));
+        const idx      = Math.min(Math.floor(progress * n), n - 1);
         setCase(idx);
       });
     }, { passive: true });
+
+    // Keyboard navigation: ← / → когда sticky в viewport
+    document.addEventListener("keydown", (e) => {
+      if (e.target.matches("input, textarea, select")) return;
+      const rect = wrap.getBoundingClientRect();
+      const inView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+      if (!inView) return;
+
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        scrollToCase(Math.min(n - 1, currentCase + 1));
+      }
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        scrollToCase(Math.max(0, currentCase - 1));
+      }
+    });
   }
 
   setCase(0);
