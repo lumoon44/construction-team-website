@@ -2054,6 +2054,125 @@ button { font: inherit; cursor: none; border: none; background: none; }
   100% { transform: translate(0,    0)    scale(1)    rotate(0deg); }
 }
 
+/* ── Blueprint placeholder (показывается когда фото кейса 404) ── */
+.case-slide__blueprint {
+  position: absolute;
+  inset: 0;
+  background-color: #091422;
+  background-image:
+    /* Основная сетка — 60px */
+    repeating-linear-gradient(0deg,
+      transparent, transparent 59px,
+      rgba(72,132,210,0.18) 59px, rgba(72,132,210,0.18) 60px),
+    repeating-linear-gradient(90deg,
+      transparent, transparent 59px,
+      rgba(72,132,210,0.18) 59px, rgba(72,132,210,0.18) 60px),
+    /* Мелкая сетка — 12px */
+    repeating-linear-gradient(0deg,
+      transparent, transparent 11px,
+      rgba(72,132,210,0.06) 11px, rgba(72,132,210,0.06) 12px),
+    repeating-linear-gradient(90deg,
+      transparent, transparent 11px,
+      rgba(72,132,210,0.06) 11px, rgba(72,132,210,0.06) 12px);
+  overflow: hidden;
+}
+
+/* Corner mark — top-left */
+.case-slide__blueprint::before {
+  content: '';
+  position: absolute;
+  top: clamp(70px, 10vh, 120px);
+  left: var(--container-pad);
+  width: 26px;
+  height: 26px;
+  border-top: 1px solid rgba(72,132,210,0.55);
+  border-left: 1px solid rgba(72,132,210,0.55);
+}
+
+/* Corner mark — bottom-right */
+.case-slide__blueprint::after {
+  content: '';
+  position: absolute;
+  bottom: clamp(var(--space-12), 8vh, var(--space-24));
+  right: var(--container-pad);
+  width: 26px;
+  height: 26px;
+  border-bottom: 1px solid rgba(72,132,210,0.55);
+  border-right: 1px solid rgba(72,132,210,0.55);
+}
+
+/* Reticle — основной прицел (circle + rings) */
+.bp-reticle {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: clamp(150px, 22vw, 280px);
+  height: clamp(150px, 22vw, 280px);
+  border: 1px solid rgba(72,132,210,0.32);
+  border-radius: 50%;
+}
+
+/* Внутреннее кольцо */
+.bp-reticle::before {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  border: 1px solid rgba(72,132,210,0.16);
+  border-radius: 50%;
+}
+
+/* Внешнее штриховое кольцо */
+.bp-reticle::after {
+  content: '';
+  position: absolute;
+  inset: -22%;
+  border: 1px dashed rgba(72,132,210,0.10);
+  border-radius: 50%;
+}
+
+/* Горизонтальная / вертикальная линии прицела */
+.bp-ch { display: block; position: absolute; top: 50%; left: 50%; }
+
+.bp-ch--h {
+  width: clamp(320px, 75vw, 1000px);
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent 0%, rgba(72,132,210,0.22) 12%,
+    rgba(72,132,210,0.22) 88%, transparent 100%);
+  transform: translate(-50%, -50%);
+}
+
+.bp-ch--v {
+  width: 1px;
+  height: clamp(320px, 75vh, 1000px);
+  background: linear-gradient(to bottom,
+    transparent 0%, rgba(72,132,210,0.22) 12%,
+    rgba(72,132,210,0.22) 88%, transparent 100%);
+  transform: translate(-50%, -50%);
+}
+
+/* Центральная точка прицела */
+.bp-dot {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: rgba(72,132,210,0.80);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px rgba(72,132,210,0.45), 0 0 28px rgba(72,132,210,0.20);
+}
+
+/* Blueprint слайд: overlay в холодных тонах */
+.has-blueprint .case-slide__overlay {
+  background:
+    linear-gradient(to top,  rgba(6,12,22,0.92) 0%, rgba(6,12,22,0.35) 42%, rgba(6,12,22,0.06) 100%),
+    linear-gradient(to right, rgba(6,12,22,0.58) 0%, transparent 65%);
+}
+
 /* Placeholder gradient when no image */
 .case-slide__placeholder {
   position: absolute;

@@ -769,8 +769,8 @@ const CASE_THEMES = [
   { c1: "rgba(217,122,30,0.55)",  c2: "rgba(245,176,55,0.30)", dur1: "15s", dur2: "21s" },
   // CASE 002 — Архитектурная подсветка: cream + amber
   { c1: "rgba(237,232,225,0.20)", c2: "rgba(217,122,30,0.28)", dur1: "19s", dur2: "25s" },
-  // CASE 003 — Подсветка деревьев: пурпур + маджента
-  { c1: "rgba(139,92,246,0.45)",  c2: "rgba(220,60,240,0.28)", dur1: "13s", dur2: "18s" },
+  // CASE 003 — Blueprint: холодный синий (в тон чертёжной сетке)
+  { c1: "rgba(72,140,220,0.38)",  c2: "rgba(100,180,255,0.22)", dur1: "13s", dur2: "18s" },
 ];
 
 function initCases() {
@@ -810,7 +810,6 @@ function initCases() {
           src="${item.src}"
           alt="${item.title} — ${item.category}"
           loading="${idx === 0 ? "eager" : "lazy"}"
-          onerror="this.style.display='none'"
         />
         <div class="case-slide__glow" aria-hidden="true">
           <span class="case-slide__glow-blob case-slide__glow-blob--a"></span>
@@ -829,6 +828,23 @@ function initCases() {
         <h3 class="case-slide__title">${item.title}</h3>
       </div>
     `;
+
+    // Blueprint fallback — когда фото нет или 404
+    slide.querySelector(".case-slide__img").addEventListener("error", (e) => {
+      e.currentTarget.style.display = "none";
+      slide.classList.add("has-blueprint");
+      const bg = slide.querySelector(".case-slide__bg");
+      const bp = document.createElement("div");
+      bp.className = "case-slide__blueprint";
+      bp.setAttribute("aria-hidden", "true");
+      bp.innerHTML = `
+        <div class="bp-reticle">
+          <span class="bp-ch bp-ch--h"></span>
+          <span class="bp-ch bp-ch--v"></span>
+          <span class="bp-dot"></span>
+        </div>`;
+      bg.insertBefore(bp, bg.firstChild);
+    });
 
     slide.addEventListener("click", () => openLightbox(idx));
     // Вставляем ДО блока с dots
