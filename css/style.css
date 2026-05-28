@@ -1887,7 +1887,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* Vertical annotation text */
 .about__vert-text {
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
   position: absolute;
   right: -1.2rem;
   top: 50%;
@@ -2335,7 +2334,8 @@ button { font: inherit; cursor: none; border: none; background: none; }
 }
 
 .footer__wordmark:hover {
-  -webkit-text-stroke-color: rgba(217, 122, 30, 0.35);
+  -webkit-text-stroke-color: rgba(217, 122, 30, 0.4);
+  text-shadow: 0 0 120px rgba(217, 122, 30, 0.12);
 }
 
 /* Разделитель */
