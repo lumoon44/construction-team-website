@@ -1948,9 +1948,92 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .case-slide__overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;   /* явно над glow (DOM-порядок + stacking) */
   background:
-    linear-gradient(to top,  rgba(8, 6, 5, 0.92) 0%, rgba(8, 6, 5, 0.45) 42%, rgba(8, 6, 5, 0.2) 100%),
-    linear-gradient(to right, rgba(8, 6, 5, 0.55) 0%, transparent 65%);
+    linear-gradient(to top,  rgba(8, 6, 5, 0.88) 0%, rgba(8, 6, 5, 0.40) 42%, rgba(8, 6, 5, 0.12) 100%),
+    linear-gradient(to right, rgba(8, 6, 5, 0.50) 0%, transparent 60%);
+}
+
+/* ── Ambient glow ── */
+.case-slide__glow {
+  position: absolute;
+  inset: 0;
+  /* z-index НЕ задаём — стек управляется порядком DOM:
+     img → glow → overlay (DOM-order, все position:absolute) */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Три блоба через span-элементы */
+.case-slide__glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+
+/* Показываем только на активном кейсе */
+.case-slide.is-active .case-slide__glow-blob { opacity: 1; }
+
+/* Blob A — большой, снизу-слева, цвет 1 */
+.case-slide__glow-blob--a {
+  width: 70%;
+  height: 75%;
+  background: radial-gradient(ellipse at 40% 60%, var(--glow-c1, rgba(217,122,30,0.5)) 0%, transparent 68%);
+  filter: blur(55px);
+  bottom: -15%;
+  left: -8%;
+  animation: glowBlobA var(--glow-dur1, 15s) ease-in-out infinite;
+}
+
+/* Blob B — средний, вверху-справа, цвет 2 */
+.case-slide__glow-blob--b {
+  width: 55%;
+  height: 60%;
+  background: radial-gradient(ellipse at 55% 45%, var(--glow-c2, rgba(245,176,55,0.3)) 0%, transparent 68%);
+  filter: blur(70px);
+  top: -5%;
+  right: -5%;
+  animation: glowBlobB var(--glow-dur2, 21s) ease-in-out infinite reverse;
+  transition-delay: 0.25s;
+}
+
+/* Blob C — маленький акцентный, посередине */
+.case-slide__glow-blob--c {
+  width: 35%;
+  height: 40%;
+  background: radial-gradient(ellipse at center, var(--glow-c1, rgba(217,122,30,0.25)) 0%, transparent 70%);
+  filter: blur(90px);
+  top: 35%;
+  left: 30%;
+  animation: glowBlobC calc(var(--glow-dur1, 15s) * 1.3) ease-in-out infinite;
+  transition-delay: 0.5s;
+}
+
+/* Keyframes — органические, непредсказуемые траектории */
+@keyframes glowBlobA {
+  0%   { transform: translate(0,    0)    scale(1); }
+  20%  { transform: translate(4%,  -7%)   scale(1.08); }
+  45%  { transform: translate(9%,   3%)   scale(0.93); }
+  70%  { transform: translate(-4%,  8%)   scale(1.06); }
+  100% { transform: translate(0,    0)    scale(1); }
+}
+
+@keyframes glowBlobB {
+  0%   { transform: translate(0,    0)    scale(1); }
+  25%  { transform: translate(-7%,  5%)   scale(1.12); }
+  55%  { transform: translate(3%,  -8%)   scale(0.91); }
+  80%  { transform: translate(-2%,  2%)   scale(1.04); }
+  100% { transform: translate(0,    0)    scale(1); }
+}
+
+@keyframes glowBlobC {
+  0%   { transform: translate(0,    0)    scale(1)    rotate(0deg); }
+  33%  { transform: translate(-6%,  6%)   scale(1.15) rotate(5deg); }
+  66%  { transform: translate(5%,  -5%)   scale(0.88) rotate(-3deg); }
+  100% { transform: translate(0,    0)    scale(1)    rotate(0deg); }
 }
 
 /* Placeholder gradient when no image */
@@ -2111,7 +2194,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-weight: 500;
 }
 
-/* Mobile: stack cases in normal flow with scroll-snap */
+/* Mobile: stack cases in normal flow */
 @media (max-width: 768px) {
   .cases-sticky-wrap { height: auto !important; }
 
@@ -2131,6 +2214,12 @@ button { font: inherit; cursor: none; border: none; background: none; }
   .case-slide__content {
     opacity: 1;
     transform: none;
+  }
+
+  /* На мобиле все слайды видимы — показываем glow у каждого */
+  .case-slide__glow-blob {
+    opacity: 1 !important;
+    transition: none;
   }
 
   .cases-dots { display: none; }
