@@ -413,6 +413,18 @@ button { font: inherit; cursor: none; border: none; background: none; }
   gap: 3px;
 }
 
+/* Когда логотип добавлен — раскомментируйте тег <img class="logo__img"> в HTML */
+.logo__img {
+  display: block;
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Скрыть текстовый логотип при наличии img — добавьте класс .logo--has-image на <a> */
+.logo--has-image .logo__name,
+.logo--has-image .logo__sub { display: none; }
+
 .logo__name {
   font-family: var(--font-display);
   font-size: 1.75rem;
