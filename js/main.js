@@ -135,7 +135,7 @@ function initCursor() {
   }
   animateRing();
 
-  const hoverTargets = "a, button, .portfolio-card, .service-card, .value-card, .messenger-btn";
+  const hoverTargets = "a, button, .portfolio-card, .service-card, .value-card, .messenger-btn, .case-slide";
 
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(hoverTargets)) {
@@ -502,7 +502,25 @@ function renderLightboxSlide() {
   const desc = document.getElementById("lb-desc");
   const counter = document.getElementById("lb-counter");
 
-  if (img) { img.src = item.src; img.alt = item.title; }
+  if (img) {
+    img.style.display = "block";
+    img.src = item.src;
+    img.alt = item.title;
+    img.onerror = () => {
+      // Фото нет — скрываем тег <img>, показываем тёмный фон-заглушку
+      img.style.display = "none";
+      const wrap = img.closest(".lightbox__img-wrap");
+      if (wrap && !wrap.querySelector(".lb-no-img")) {
+        const placeholder = document.createElement("div");
+        placeholder.className = "lb-no-img";
+        placeholder.innerHTML = `<span>${item.caseNum}</span>`;
+        wrap.insertBefore(placeholder, img);
+      }
+    };
+    // Убираем старую заглушку при переключении слайдов
+    const oldPlaceholder = img.closest(".lightbox__img-wrap")?.querySelector(".lb-no-img");
+    if (oldPlaceholder) oldPlaceholder.remove();
+  }
   if (caption) caption.textContent = item.title;
   if (desc) desc.textContent = item.description;
   if (counter) counter.textContent = `${lightboxCurrentIndex + 1} / ${PORTFOLIO_ITEMS.length}`;

@@ -1898,7 +1898,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* Sticky viewport wrapper */
 .cases-sticky-wrap {
   position: relative;
-  /* height set by JS: n * 120vh */
+  /* height set by JS: n * 140vh */
 }
 
 .cases-sticky {
@@ -2222,6 +2222,9 @@ button { font: inherit; cursor: none; border: none; background: none; }
     transition: none;
   }
 
+  /* Убираем zoom-эффект: на мобиле все слайды без is-active */
+  .case-slide__img { transform: scale(1) !important; transition: none; }
+
   .cases-dots { display: none; }
   .cases-hint { display: none; }
 }
@@ -2406,4 +2409,24 @@ button { font: inherit; cursor: none; border: none; background: none; }
 @media (max-width: 768px) {
   .about__quote { font-size: clamp(1.5rem, 6vw, 2rem); }
   .about__facts { gap: var(--space-4); }
+}
+
+/* Lightbox — заглушка для отсутствующего фото */
+.lb-no-img {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d0b09;
+}
+
+.lb-no-img span {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 232, 225, 0.1);
+  user-select: none;
 }
