@@ -2,18 +2,18 @@
    CSS-переменные
    ============================================================ */
 :root {
-  --color-bg:           #110e0b;
-  --color-bg-card:      #161210;
-  --color-bg-elevated:  #1d1814;
-  --color-border:       rgba(255, 255, 255, 0.06);
-  --color-border-warm:  rgba(217, 122, 30, 0.2);
-  --color-accent:       #d97a1e;
-  --color-accent-dim:   rgba(217, 122, 30, 0.12);
-  --color-accent-glow:  rgba(217, 122, 30, 0.25);
-  --color-paper:        #f5ede0;
-  --color-text:         #ede8e1;
-  --color-text-muted:   #6e6760;
-  --color-text-faint:   #2e2b28;
+  --color-bg:           #07080d;   /* ночное небо */
+  --color-bg-card:      #0b0d18;
+  --color-bg-elevated:  #10121e;
+  --color-border:       rgba(140, 175, 220, 0.07);
+  --color-border-warm:  rgba(106, 170, 216, 0.22);
+  --color-accent:       #6aaad8;   /* лунный свет */
+  --color-accent-dim:   rgba(106, 170, 216, 0.1);
+  --color-accent-glow:  rgba(106, 170, 216, 0.24);
+  --color-paper:        #e2ecf8;
+  --color-text:         #c8d8ec;
+  --color-text-muted:   #4a5e72;
+  --color-text-faint:   #161a26;
   --color-success:      #4caf7d;
 
   --font-display:  'Cormorant Garamond', Georgia, serif;
@@ -48,7 +48,7 @@
   --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --shadow-card: 0 8px 48px rgba(0, 0, 0, 0.6);
-  --shadow-accent: 0 0 40px rgba(217, 122, 30, 0.22);
+  --shadow-accent: 0 0 40px rgba(106, 170, 216, 0.2);
   --container-max: 1320px;
   --container-pad: clamp(1.25rem, 5vw, 3rem);
 }
@@ -150,7 +150,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   left: 0;
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(217, 122, 30, 0.5);
+  border: 1px solid rgba(106, 170, 216, 0.5);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -408,31 +408,46 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* Логотип */
 .logo {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   line-height: 1;
+  text-decoration: none;
+}
+
+.logo__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 6px rgba(106, 170, 216, 0.55))
+          drop-shadow(0 0 14px rgba(106, 170, 216, 0.25));
+  transition: filter var(--transition), transform var(--transition);
+}
+
+.logo:hover .logo__icon {
+  filter: drop-shadow(0 0 8px rgba(106, 170, 216, 0.8))
+          drop-shadow(0 0 20px rgba(106, 170, 216, 0.4));
+  transform: rotate(-8deg) scale(1.06);
+}
+
+.logo__text {
+  display: flex;
+  flex-direction: column;
   gap: 3px;
 }
-
-/* Когда логотип добавлен — раскомментируйте тег <img class="logo__img"> в HTML */
-.logo__img {
-  display: block;
-  height: 36px;
-  width: auto;
-  object-fit: contain;
-}
-
-/* Скрыть текстовый логотип при наличии img — добавьте класс .logo--has-image на <a> */
-.logo--has-image .logo__name,
-.logo--has-image .logo__sub { display: none; }
 
 .logo__name {
   font-family: var(--font-display);
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.04em;
-  color: var(--color-text);
+  /* «Lu» — белый */
+  color: var(--color-paper);
 }
 
+/* «moon» — акцентный синий */
 .logo__name span {
   color: var(--color-accent);
 }
@@ -445,6 +460,17 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-family: var(--font-body);
   font-weight: 500;
 }
+
+/* Когда будет готов SVG/PNG логотип */
+.logo__img {
+  display: block;
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+.logo--has-image .logo__name,
+.logo--has-image .logo__sub,
+.logo--has-image .logo__icon { display: none; }
 
 /* Навигация */
 .nav__menu {
@@ -558,7 +584,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   overflow: hidden;
 }
 
-/* Ambient amber glow — повторяет язык cases, объединяет секции */
+/* Ambient lunar glow — холодное сияние, объединяет секции */
 .hero::before {
   content: '';
   position: absolute;
@@ -566,7 +592,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   left: -8%;
   width: 72%;
   height: 85%;
-  background: radial-gradient(ellipse at 30% 80%, rgba(217,122,30,0.18) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 30% 80%, rgba(106, 170, 216, 0.12) 0%, transparent 60%);
   pointer-events: none;
   z-index: 1;
   animation: heroGlowPulse 16s ease-in-out infinite alternate;
@@ -577,33 +603,117 @@ button { font: inherit; cursor: none; border: none; background: none; }
   100% { opacity: 1.0; transform: scale(1.06); }
 }
 
+/* ----- Ночное небо ----- */
 .hero__bg {
   position: absolute;
   inset: -10%;
-  background-image: url('../assets/portfolio/work-02.jpg');
-  background-size: cover;
-  background-position: center 40%;
   transform: scale(1.1);
   will-change: transform;
+  background:
+    radial-gradient(ellipse 90% 70% at 78% 18%, rgba(106, 170, 216, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 120% 80% at 50% 120%, rgba(40, 70, 120, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, #060912 0%, #0a1020 40%, #0c1424 70%, #07080d 100%);
 }
 
+/* Звёздное поле — три слоя точек разной плотности */
+.hero__stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, rgba(226, 236, 248, 0.9), transparent),
+    radial-gradient(1px 1px   at 28% 32%, rgba(226, 236, 248, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 42% 12%, rgba(226, 236, 248, 0.8), transparent),
+    radial-gradient(1px 1px   at 58% 26%, rgba(200, 216, 236, 0.6), transparent),
+    radial-gradient(1px 1px   at 67% 8%,  rgba(226, 236, 248, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 83% 40%, rgba(226, 236, 248, 0.85), transparent),
+    radial-gradient(1px 1px   at 91% 16%, rgba(200, 216, 236, 0.6), transparent),
+    radial-gradient(1px 1px   at 8% 46%,  rgba(226, 236, 248, 0.65), transparent),
+    radial-gradient(1px 1px   at 36% 52%, rgba(200, 216, 236, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 72% 56%, rgba(226, 236, 248, 0.7), transparent),
+    radial-gradient(1px 1px   at 22% 8%,  rgba(226, 236, 248, 0.6), transparent),
+    radial-gradient(1px 1px   at 52% 44%, rgba(200, 216, 236, 0.45), transparent);
+  background-repeat: no-repeat;
+  animation: starsTwinkle 7s ease-in-out infinite alternate;
+}
+
+@keyframes starsTwinkle {
+  0%   { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
+/* ----- Луна ----- */
+.hero__moon {
+  position: absolute;
+  top: 14%;
+  right: 12%;
+  width: clamp(90px, 14vw, 200px);
+  height: clamp(90px, 14vw, 200px);
+  z-index: 2;
+}
+
+.hero__moon-glow {
+  position: absolute;
+  inset: -60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(106, 170, 216, 0.45) 0%, rgba(106, 170, 216, 0.12) 35%, transparent 68%);
+  animation: heroGlowPulse 9s ease-in-out infinite alternate;
+}
+
+.hero__moon-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 36%, #f2f7fd 0%, #cdddee 45%, #9fb8d2 100%);
+  box-shadow:
+    inset -14px -10px 30px rgba(30, 55, 90, 0.55),
+    inset 10px 8px 22px rgba(255, 255, 255, 0.35),
+    0 0 50px rgba(106, 170, 216, 0.4);
+}
+
+/* Кратеры */
+.hero__moon-body::before,
+.hero__moon-body::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(90, 120, 155, 0.3);
+  box-shadow: inset 2px 2px 4px rgba(40, 65, 100, 0.4);
+}
+.hero__moon-body::before {
+  width: 22%; height: 22%;
+  top: 28%; left: 30%;
+}
+.hero__moon-body::after {
+  width: 13%; height: 13%;
+  top: 58%; left: 55%;
+  box-shadow:
+    inset 1px 1px 3px rgba(40, 65, 100, 0.4),
+    14px -22px 0 -2px rgba(90, 120, 155, 0.22);
+}
+
+/* ----- Силуэт горизонта ----- */
+.hero__horizon {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 30%;
+  background: linear-gradient(180deg, transparent 0%, rgba(4, 6, 12, 0.7) 55%, #07080d 100%);
+}
+
+/* Затемнение поверх неба для читаемости текста */
 .hero__bg::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 20% 80%, rgba(217, 122, 30, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 20% 85%, rgba(106, 170, 216, 0.1) 0%, transparent 60%),
     linear-gradient(
       to bottom,
-      rgba(17, 14, 11, 0.5) 0%,
-      rgba(17, 14, 11, 0.15) 35%,
-      rgba(17, 14, 11, 0.75) 70%,
-      rgba(17, 14, 11, 1) 100%
+      rgba(6, 9, 18, 0.35) 0%,
+      rgba(6, 9, 18, 0.05) 32%,
+      rgba(6, 9, 18, 0.7) 72%,
+      rgba(7, 8, 13, 1) 100%
     );
-}
-
-.hero__bg:not([style]) {
-  background-image: linear-gradient(135deg, #1e1400 0%, #110e0b 50%, #0e1520 100%);
 }
 
 .hero__content {
@@ -633,7 +743,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 }
 
 .hero__coord-line span {
-  color: rgba(217, 122, 30, 0.5);
+  color: rgba(106, 170, 216, 0.5);
 }
 
 /* Технический маркер CASE */
@@ -698,7 +808,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .hero__tagline {
   font-size: var(--size-md);
-  color: rgba(237, 232, 225, 0.6);
+  color: rgba(226, 236, 248, 0.6);
   margin-bottom: var(--space-12);
   max-width: 44ch;
   line-height: 1.65;
@@ -838,7 +948,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .value-card:hover {
   border-color: var(--color-border-warm);
-  box-shadow: 0 4px 24px rgba(217, 122, 30, 0.08);
+  box-shadow: 0 4px 24px rgba(106, 170, 216, 0.07);
 }
 
 .value-card:hover::before { opacity: 1; }
@@ -898,7 +1008,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.service-row:hover { background: rgba(217, 122, 30, 0.025); }
+.service-row:hover { background: rgba(106, 170, 216, 0.04); }
 .service-row:hover::before { transform: scaleY(1); }
 
 .service-row__num {
@@ -990,7 +1100,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   position: relative;
   aspect-ratio: 16/9;
   cursor: none;
-  background: linear-gradient(135deg, #1e1500 0%, #110e0b 55%, #0e1525 100%);
+  background: linear-gradient(135deg, #05060e 0%, #07080d 55%, #060c18 100%);
   overflow: hidden;
 }
 
@@ -998,7 +1108,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 55% 40% at 25% 70%, rgba(217, 122, 30, 0.1), transparent 65%);
+  background: radial-gradient(ellipse 55% 40% at 25% 70%, rgba(106, 170, 216, 0.09), transparent 65%);
   z-index: 1;
 }
 
@@ -1042,7 +1152,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(237, 232, 225, 0.45);
+  color: rgba(226, 236, 248, 0.45);
   font-weight: 500;
   margin-bottom: var(--space-3);
 }
@@ -1217,7 +1327,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   margin-bottom: var(--space-10);
   max-width: 70ch;
   padding-left: var(--space-6);
-  border-left: 2px solid rgba(217, 122, 30, 0.35);
+  border-left: 2px solid rgba(106, 170, 216, 0.35);
 }
 
 .testimonial__author {
@@ -1776,6 +1886,23 @@ button { font: inherit; cursor: none; border: none; background: none; }
   transition: opacity 0.35s ease;
 }
 
+.page-intro__moon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  transform: translateY(8px) rotate(-20deg);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+  filter: drop-shadow(0 0 12px rgba(106, 170, 216, 0.6));
+}
+
+.page-intro.is-visible .page-intro__moon {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+}
+
 .page-intro__wordmark {
   font-family: var(--font-display);
   font-size: clamp(4rem, 16vw, 13rem);
@@ -1913,10 +2040,75 @@ button { font: inherit; cursor: none; border: none; background: none; }
   padding-block: var(--space-24) var(--space-12);
 }
 
+/* Ссылка-пропуск в интро галереи */
+.cases-skip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--space-8);
+  font-size: var(--size-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
+  transition: color var(--transition-fast), gap var(--transition-fast);
+}
+
+.cases-skip-link svg {
+  transition: transform var(--transition-fast);
+}
+
+.cases-skip-link:hover {
+  color: var(--color-accent);
+  gap: 11px;
+}
+
+.cases-skip-link:hover svg {
+  transform: translateY(2px);
+}
+
+/* Плавающая кнопка «К заявке» — верх-право, видна пока галерея закреплена */
+.cases-skip {
+  position: absolute;
+  top: clamp(80px, 12vh, 140px);
+  right: var(--container-pad);
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.5rem 0.9rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: rgba(10, 16, 32, 0.55);
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  animation: fadeIn 1s 1.4s ease forwards;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.cases-skip:hover {
+  color: var(--color-accent);
+  border-color: var(--color-border-warm);
+  background: rgba(10, 16, 32, 0.8);
+}
+
+.cases-skip svg {
+  transition: transform var(--transition-fast);
+}
+
+.cases-skip:hover svg {
+  transform: translateY(2px);
+}
+
 /* Sticky viewport wrapper */
 .cases-sticky-wrap {
   position: relative;
-  /* height set by JS: n * 140vh */
+  /* height set by JS: n * perCase vh */
 }
 
 .cases-sticky {
@@ -2177,7 +2369,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .case-slide__placeholder {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1e1500 0%, #110e0b 55%, #0e1525 100%);
+  background: linear-gradient(135deg, #05060e 0%, #07080d 55%, #060c18 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2215,7 +2407,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-size: 9px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(217, 122, 30, 0.65);
+  color: rgba(106, 170, 216, 0.65);
   font-family: var(--font-body);
   font-weight: 600;
 }
@@ -2224,7 +2416,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(237, 232, 225, 0.35);
+  color: rgba(226, 236, 248, 0.35);
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -2261,7 +2453,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(237, 232, 225, 0.4);
+  color: rgba(226, 236, 248, 0.4);
   font-weight: 500;
   margin-bottom: var(--space-4);
 }
@@ -2291,7 +2483,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(237, 232, 225, 0.2);
+  background: rgba(226, 236, 248, 0.2);
   border: none;
   cursor: pointer;
   transition: background var(--transition-fast), transform var(--transition-fast), width var(--transition-fast);
@@ -2326,7 +2518,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(237, 232, 225, 0.3);
+  color: rgba(226, 236, 248, 0.3);
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -2357,7 +2549,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .cases-count__sep {
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: rgba(237, 232, 225, 0.2);
+  color: rgba(226, 236, 248, 0.2);
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -2365,7 +2557,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .cases-count__total {
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: rgba(237, 232, 225, 0.2);
+  color: rgba(226, 236, 248, 0.2);
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -2404,6 +2596,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   .cases-dots { display: none; }
   .cases-hint { display: none; }
   .cases-count { display: none; }
+  .cases-skip { display: none; }
 }
 
 /* ============================================================
@@ -2425,7 +2618,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   left: -5%;
   width: 55%;
   height: 90%;
-  background: radial-gradient(ellipse at bottom left, rgba(217, 122, 30, 0.11) 0%, transparent 65%);
+  background: radial-gradient(ellipse at bottom left, rgba(106, 170, 216, 0.09) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
@@ -2444,17 +2637,27 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 0.88;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(237, 232, 225, 0.12);
   display: block;
   width: 100%;
-  transition: -webkit-text-stroke-color 0.5s ease;
+  /* background-clip: text вместо text-stroke — чистый рендеринг без зазубрин */
+  background: linear-gradient(
+    135deg,
+    rgba(140, 175, 220, 0.18) 0%,
+    rgba(200, 220, 240, 0.30) 50%,
+    rgba(140, 175, 220, 0.15) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* GPU-слой снимает субпиксельные артефакты */
+  transform: translateZ(0);
+  will-change: opacity;
+  transition: opacity 0.45s ease;
   user-select: none;
 }
 
 .footer__wordmark:hover {
-  -webkit-text-stroke-color: rgba(217, 122, 30, 0.4);
-  text-shadow: 0 0 120px rgba(217, 122, 30, 0.12);
+  opacity: 0.75;
 }
 
 /* Разделитель */
@@ -2564,7 +2767,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   .footer__right-col { align-items: flex-start; }
   .footer__quick-nav { align-items: flex-start; }
   .footer__bottom { flex-direction: column; align-items: flex-start; }
-  .footer__wordmark { -webkit-text-stroke-width: 0.5px; }
+  /* .footer__wordmark — text-stroke не используется, правило удалено */
 }
 
 /* ============================================================
@@ -2605,6 +2808,198 @@ button { font: inherit; cursor: none; border: none; background: none; }
   font-weight: 600;
   letter-spacing: -0.04em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(237, 232, 225, 0.1);
+  -webkit-text-stroke: 1px rgba(226, 236, 248, 0.1);
   user-select: none;
+}
+
+/* ============================================================
+   SERVICE-ROW HINT (ценовой ориентир)
+   ============================================================ */
+.service-row__hint {
+  margin-top: var(--space-3);
+  font-size: var(--size-xs);
+  color: var(--color-accent);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  opacity: 0.85;
+}
+
+/* ============================================================
+   СЕКЦИЯ ЦЕН
+   ============================================================ */
+.pricing__wrap {
+  margin-top: var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* Раздел (Электромонтаж / Ландшафтное освещение) */
+.pricing-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pricing-section__label {
+  font-family: var(--font-display);
+  font-size: var(--size-lg);
+  font-weight: 600;
+  color: var(--color-paper);
+  letter-spacing: -0.02em;
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-2);
+}
+
+.pricing-section__note {
+  margin-top: var(--space-6);
+  font-size: var(--size-sm);
+  color: var(--color-text-muted);
+  font-weight: 300;
+  line-height: 1.6;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-border-warm);
+}
+
+/* Аккордеон */
+.accordion-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-btn {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+.accordion-btn:hover,
+.accordion-btn:focus-visible {
+  color: var(--color-paper);
+  outline: none;
+}
+
+.accordion-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.accordion-btn__title {
+  font-size: var(--size-base);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.accordion-btn__count {
+  font-size: var(--size-xs);
+  color: var(--color-text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.accordion-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  transition: transform var(--transition), border-color var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+
+.accordion-item.is-open .accordion-btn__icon {
+  transform: rotate(180deg);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Панель аккордеона */
+.accordion-panel {
+  overflow: hidden;
+}
+
+.accordion-panel[hidden] {
+  display: none;
+}
+
+/* Таблица цен */
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-6);
+  font-size: var(--size-sm);
+}
+
+.price-table thead th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+}
+
+.price-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background var(--transition-fast);
+}
+
+.price-table tbody tr:hover {
+  background: rgba(106, 170, 216, 0.05);
+}
+
+.price-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text);
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.price-table__unit {
+  text-align: center;
+  white-space: nowrap;
+  color: var(--color-text-muted) !important;
+  width: 72px;
+}
+
+.price-table__price {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-paper) !important;
+  width: 110px;
+}
+
+/* Мобильная адаптация прайса */
+@media (max-width: 768px) {
+  .accordion-btn {
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+  .accordion-btn__count { display: none; }
+
+  .price-table { font-size: var(--size-xs); }
+  .price-table thead th,
+  .price-table tbody td { padding: var(--space-2) var(--space-2); }
+  .price-table__unit { width: 52px; }
+  .price-table__price { width: 80px; }
+
+  .pricing-section__label { font-size: var(--size-md); }
 }

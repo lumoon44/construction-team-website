@@ -3,28 +3,30 @@
    ============================================================ */
 const SITE_CONFIG = {
   company: {
-    name: "Контур",
-    nameEn: "Kontur",
+    name: "Lumoon",
+    nameEn: "Lumoon",
     tagline: "Строим пространство, в котором хочется жить",
     description: "Строительная бригада из Костромы. Благоустройство, ландшафтное освещение, архитектурная подсветка.",
-    founded: "2018",
+    founded: "2026",
     city: "Кострома",
+    legalName: "ИП Лубнин Матфей Николаевич",
+    inn: "441403203883",
   },
   contacts: {
-    phone: "+7 (494) 200-00-00",
-    phoneHref: "tel:+74942000000",
-    email: "info@kontur-kostroma.ru",
+    phone: "+7 (950) 245-93-17",
+    phoneHref: "tel:+79502459317",
+    email: "lumoon44@outlook.com",
     address: "г. Кострома",
-    whatsapp: "https://wa.me/74942000000",
-    telegram: "https://t.me/kontur_kostroma",
-    vk: "https://vk.com/kontur_kostroma",
+    whatsapp: "https://wa.me/79502459317",
+    telegram: "https://t.me/lumoon44",
+    vk: "https://vk.com/lumoon44",
   },
   colors: {
-    accentWarm: "#d97a1e",
-    bg: "#110e0b",
-    bgCard: "#161210",
-    textPrimary: "#ede8e1",
-    textMuted: "#6e6760",
+    accent: "#6aaad8",
+    bg: "#07080d",
+    bgCard: "#0b0d18",
+    textPrimary: "#c8d8ec",
+    textMuted: "#4a5e72",
   },
 };
 
@@ -65,6 +67,194 @@ const PORTFOLIO_ITEMS = [
 ];
 
 /* ============================================================
+   ДАННЫЕ ПРАЙСА
+   ============================================================ */
+const PRICING_DATA = [
+  {
+    id: "elektro",
+    sectionLabel: "Электромонтажные работы",
+    note: "Дополнительные работы по электромонтажу — 700 ₽ / час·чел.",
+    groups: [
+      {
+        title: "Подготовка: штробление и отверстия",
+        rows: [
+          { name: "Штробление в пеноблоке/гипсолите 20×20",   unit: "м.п.", price: 300 },
+          { name: "Штробление в кирпиче/дереве 20×20",         unit: "м.п.", price: 350 },
+          { name: "Штробление в бетоне 20×20",                 unit: "м.п.", price: 560 },
+          { name: "Штробление в пеноблоке/гипсолите 20×40",   unit: "м.п.", price: 350 },
+          { name: "Штробление в кирпиче/дереве 20×40",         unit: "м.п.", price: 450 },
+          { name: "Штробление в бетоне 20×40",                 unit: "м.п.", price: 600 },
+          { name: "Штробление в пеноблоке/гипсолите 40×40",   unit: "м.п.", price: 400 },
+          { name: "Штробление в кирпиче/дереве 40×40",         unit: "м.п.", price: 500 },
+          { name: "Штробление в бетоне 40×40",                 unit: "м.п.", price: 720 },
+          { name: "Штробление в пеноблоке/гипсолите 100×40",  unit: "м.п.", price: 600 },
+          { name: "Штробление в кирпиче/дереве 100×40",        unit: "м.п.", price: 820 },
+          { name: "Штробление в бетоне 100×40",                unit: "м.п.", price: 1150 },
+          { name: "Штроба в стяжке под кабель тёплого пола",  unit: "м.п.", price: 350 },
+          { name: "Высверливание под подрозетник (кирпич)",    unit: "ед.",  price: 380 },
+          { name: "Высверливание под подрозетник (гипсокартон)", unit: "ед.", price: 250 },
+          { name: "Высверливание под подрозетник (бетон)",     unit: "ед.",  price: 580 },
+          { name: "Высверливание под распаечную коробку (кирпич)",      unit: "ед.", price: 520 },
+          { name: "Высверливание под распаечную коробку (гипсокартон)", unit: "ед.", price: 300 },
+          { name: "Высверливание под распаечную коробку (бетон)",       unit: "ед.", price: 720 },
+          { name: "Штукатурка штроб",                          unit: "м.п.", price: 200 },
+        ],
+      },
+      {
+        title: "Монтаж трасс и коробов",
+        rows: [
+          { name: "Монтаж короба (кабель-канала) 20×40 мм",  unit: "м.п.", price: 150 },
+          { name: "Монтаж короба 40×40 мм",                   unit: "м.п.", price: 170 },
+          { name: "Монтаж короба 60×40 мм",                   unit: "м.п.", price: 220 },
+          { name: "Монтаж короба 100×40 мм",                  unit: "м.п.", price: 280 },
+          { name: "Монтаж короба 100×60 мм",                  unit: "м.п.", price: 320 },
+          { name: "Монтаж ретро-проводки на изоляторах",      unit: "м.п.", price: 190 },
+          { name: "Монтаж наружной распаечной коробки",       unit: "ед.",  price: 390 },
+          { name: "Монтаж подрозетника в готовое отверстие (гипсокартон)", unit: "ед.", price: 190 },
+          { name: "Монтаж подрозетника на раствор (кирпич/бетон)",        unit: "ед.", price: 250 },
+        ],
+      },
+      {
+        title: "Прокладка кабеля",
+        rows: [
+          { name: "Кабель СИП-4 (2×16)",                              unit: "м.п.", price: 160 },
+          { name: "Кабель СИП-4 (4×16)",                              unit: "м.п.", price: 180 },
+          { name: "В штробе до 4 мм²",                                unit: "м.п.", price: 110 },
+          { name: "В штробе более 4 мм²",                             unit: "м.п.", price: 120 },
+          { name: "Открытым способом до 4 мм²",                      unit: "м.п.", price: 110 },
+          { name: "Открытым способом от 4 мм²",                      unit: "м.п.", price: 120 },
+          { name: "В кабель-канале до 4 мм² (без монтажа канала)",   unit: "м.п.", price: 100 },
+          { name: "В кабель-канале более 4 мм²",                     unit: "м.п.", price: 120 },
+          { name: "Протяжка кабеля в гофре",                         unit: "м.п.", price: 65  },
+          { name: "В гофре до 4 мм²",                                unit: "м.п.", price: 160 },
+          { name: "В гофре до 10 мм²",                               unit: "м.п.", price: 190 },
+          { name: "Слаботочные провода (телефон, интернет, ТВ)",     unit: "м.п.", price: 95  },
+        ],
+      },
+      {
+        title: "Монтаж электрощитов",
+        rows: [
+          { name: "Наружный электрощит",                              unit: "ед.", price: 1400  },
+          { name: "Внутренний щит 8 модулей (гипсокартон)",          unit: "ед.", price: 2000  },
+          { name: "Внутренний щит 8 модулей (кирпич)",               unit: "ед.", price: 2650  },
+          { name: "Внутренний щит 8 модулей (бетон)",                unit: "ед.", price: 3250  },
+          { name: "Внутренний щит 12 модулей (гипсокартон)",         unit: "ед.", price: 2550  },
+          { name: "Внутренний щит 12 модулей (кирпич)",              unit: "ед.", price: 3550  },
+          { name: "Внутренний щит 12 модулей (бетон)",               unit: "ед.", price: 4750  },
+          { name: "Внутренний щит 18 модулей (гипсокартон)",         unit: "ед.", price: 2850  },
+          { name: "Внутренний щит 18 модулей (кирпич)",              unit: "ед.", price: 4450  },
+          { name: "Внутренний щит 18 модулей (бетон)",               unit: "ед.", price: 5750  },
+          { name: "Внутренний щит 24 модуля (гипсокартон)",          unit: "ед.", price: 3550  },
+          { name: "Внутренний щит 24 модуля (кирпич)",               unit: "ед.", price: 5150  },
+          { name: "Внутренний щит 24 модуля (бетон)",                unit: "ед.", price: 6550  },
+          { name: "Внутренний щит 36 модулей (гипсокартон)",         unit: "ед.", price: 4000  },
+          { name: "Внутренний щит 36 модулей (кирпич)",              unit: "ед.", price: 6650  },
+          { name: "Внутренний щит 36 модулей (бетон)",               unit: "ед.", price: 8150  },
+          { name: "Внутренний щит 54 модуля (гипсокартон)",          unit: "ед.", price: 4550  },
+          { name: "Внутренний щит 54 модуля (кирпич)",               unit: "ед.", price: 8150  },
+          { name: "Внутренний щит 54 модуля (бетон)",                unit: "ед.", price: 10400 },
+        ],
+      },
+      {
+        title: "Подключение, автоматы и УЗО",
+        rows: [
+          { name: "Опрессовка проводов гильзами (1 провод)", unit: "ед.", price: 180  },
+          { name: "Клеммник WAGO (за 1 шт.)",                unit: "ед.", price: 95   },
+          { name: "Автомат однополюсный",                    unit: "ед.", price: 530  },
+          { name: "Автомат двухполюсный",                    unit: "ед.", price: 630  },
+          { name: "Автомат трёхполюсный",                    unit: "ед.", price: 730  },
+          { name: "УЗО двухполюсное",                        unit: "ед.", price: 700  },
+          { name: "УЗО четырёхполюсное",                     unit: "ед.", price: 900  },
+          { name: "Электросчётчик однофазный",               unit: "ед.", price: 2300 },
+          { name: "Электросчётчик трёхфазный",               unit: "ед.", price: 3100 },
+          { name: "Подключение силового кабеля",             unit: "ед.", price: 820  },
+          { name: "Контур защитного заземления",             unit: "ед.", price: 14000 },
+        ],
+      },
+      {
+        title: "Розетки, выключатели, механизмы",
+        rows: [
+          { name: "Розетка в коробе (кабель-канале)",         unit: "ед.", price: 530 },
+          { name: "Механизм розетки в подрозетник",           unit: "ед.", price: 440 },
+          { name: "Наружная розетка",                         unit: "ед.", price: 500 },
+          { name: "Ретро-розетка",                            unit: "ед.", price: 620 },
+          { name: "Одноклавишный выключатель (механизм)",     unit: "ед.", price: 420 },
+          { name: "Двухклавишный выключатель (механизм)",     unit: "ед.", price: 440 },
+          { name: "Наружный одноклавишный выключатель",       unit: "ед.", price: 490 },
+          { name: "Наружный двухклавишный выключатель",       unit: "ед.", price: 520 },
+          { name: "Проходной одноклавишный (механизм)",       unit: "ед.", price: 500 },
+          { name: "Проходной двухклавишный (механизм)",       unit: "ед.", price: 550 },
+          { name: "Наружный проходной одноклавишный",         unit: "ед.", price: 560 },
+          { name: "Наружный проходной двухклавишный",         unit: "ед.", price: 600 },
+          { name: "Ретро-выключатель",                        unit: "ед.", price: 590 },
+          { name: "Ретро распаечная коробка",                 unit: "ед.", price: 600 },
+          { name: "Компьютерная / телефонная / ТВ розетка",   unit: "ед.", price: 450 },
+          { name: "Диммер",                                   unit: "ед.", price: 600 },
+          { name: "Реостат для тёплого пола",                 unit: "ед.", price: 870 },
+        ],
+      },
+      {
+        title: "Светильники, люстры, светодиодная лента",
+        rows: [
+          { name: "Монтаж крюка под люстру",                  unit: "ед.", price: 500  },
+          { name: "Монтаж простой люстры на крюк",            unit: "ед.", price: 1100 },
+          { name: "Монтаж сложной люстры на крюк",            unit: "ед.", price: 2200 },
+          { name: "Сборка простой люстры",                    unit: "ед.", price: 870  },
+          { name: "Сборка сложной люстры",                    unit: "ед.", price: 1600 },
+          { name: "Монтаж точечных светильников",             unit: "ед.", price: 520  },
+          { name: "Монтаж светильника «Армстронг»",           unit: "ед.", price: 830  },
+          { name: "Монтаж настенного светильника (бра)",      unit: "ед.", price: 720  },
+          { name: "Монтаж светодиодной ленты",                unit: "ед.", price: 350  },
+          { name: "Монтаж трансформатора для галогенов",      unit: "ед.", price: 520  },
+        ],
+      },
+      {
+        title: "Вентиляция, слаботочка, домофоны",
+        rows: [
+          { name: "Вентилятор вытяжки",          unit: "ед.", price: 1100 },
+          { name: "Накладной канальный вентилятор", unit: "ед.", price: 1250 },
+          { name: "Установка звонка",             unit: "ед.", price: 700  },
+          { name: "Установка видеодомофона",      unit: "ед.", price: 2400 },
+        ],
+      },
+      {
+        title: "Крупная бытовая техника",
+        rows: [
+          { name: "Электроплита",                         unit: "ед.", price: 2100 },
+          { name: "Варочная панель",                      unit: "ед.", price: 2100 },
+          { name: "Духовой шкаф",                         unit: "ед.", price: 2050 },
+          { name: "Кухонная вытяжка",                     unit: "ед.", price: 2250 },
+          { name: "Встраиваемая стиральная машина",       unit: "ед.", price: 2250 },
+          { name: "Встраиваемая посудомоечная машина",    unit: "ед.", price: 2100 },
+        ],
+      },
+    ],
+  },
+  {
+    id: "landscape-light",
+    sectionLabel: "Ландшафтное освещение",
+    note: "Дополнительные работы по ландшафтному освещению — 650 ₽ / час·чел. Работы внутри здания рассчитываются по разделу «Электромонтаж».",
+    groups: [
+      {
+        title: "Ландшафтное освещение",
+        rows: [
+          { name: "Копка траншеи (0,6 м)",                                         unit: "м.п.", price: 450  },
+          { name: "Выемка грунта вручную",                                         unit: "м³",   price: 2500 },
+          { name: "Прокладка кабеля открытым способом в гофре",                   unit: "м.п.", price: 225  },
+          { name: "Укладка кабеля в гофре в траншею",                             unit: "м.п.", price: 300  },
+          { name: "Установка ландшафтных светильников в грунт с подключением",    unit: "ед.",  price: 1200 },
+          { name: "Монтаж светодиодной ленты в профиле",                          unit: "м.п.", price: 1500 },
+          { name: "Монтаж навесных светильников с подключением",                  unit: "ед.",  price: 800  },
+          { name: "Установка и расключение распаечной коробки (в грунт)",         unit: "ед.",  price: 1500 },
+          { name: "Установка и подключение наружного выключателя",                unit: "ед.",  price: 500  },
+          { name: "Монтаж распределительного щита",                               unit: "ед.",  price: 5000 },
+        ],
+      },
+    ],
+  },
+];
+
+/* ============================================================
    ИНИЦИАЛИЗАЦИЯ
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
@@ -79,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initParallax();
   initSplitText();      // учитывает intro-задержку через sessionStorage
   initMarquee();
+  initPricing();        // аккордеон с прайсом
   initCases();          // fullscreen sticky cases (заменяет initPortfolio)
   initPortfolio();      // no-op если #portfolio-track отсутствует
   initLightbox();
@@ -365,7 +556,7 @@ function initMarquee() {
     "Костромская область",
     "Террасы и беседки",
     "Заборы и ограждения",
-    "Под ключ · с 2018",
+    "Lumoon · свет и форма",
     "Гарантия 3 года",
     "Бесплатный замер",
   ];
@@ -544,7 +735,7 @@ const TESTIMONIALS = [
   {
     name: "Александр К.",
     role: "Владелец частного дома, Кострома",
-    text: "Команда «Контур» полностью преобразила наш участок. Подсветка дорожек и фасада — выше всяких ожиданий. Работали аккуратно, в срок, без лишних вопросов.",
+    text: "Команда «Lumoon» полностью преобразила наш участок. Подсветка дорожек и фасада — выше всяких ожиданий. Работали аккуратно, в срок, без лишних вопросов.",
     rating: 5,
   },
   {
@@ -677,18 +868,25 @@ function initContactForm() {
     return !error;
   }
 
-  function submitForm(data) {
+  async function submitForm(data) {
     const btn = form.querySelector('[type="submit"]');
     const status = document.getElementById("form-status");
 
     btn.disabled = true;
     btn.classList.add("is-loading");
 
-    console.log("Форма отправлена:", Object.fromEntries(data));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(data)),
+      });
 
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.classList.remove("is-loading");
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error || "Ошибка сервера");
+      }
+
       form.reset();
       Object.values(fields).forEach(({ el }) => {
         el?.closest(".field")?.classList.remove("is-valid", "has-error");
@@ -696,9 +894,15 @@ function initContactForm() {
 
       if (status) {
         status.classList.add("is-visible");
-        setTimeout(() => status.classList.remove("is-visible"), 5000);
+        setTimeout(() => status.classList.remove("is-visible"), 6000);
       }
-    }, 1200);
+    } catch (err) {
+      console.error("Ошибка отправки:", err);
+      alert("Не удалось отправить заявку: " + err.message + "\n\nПозвоните нам напрямую — номер указан на сайте.");
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("is-loading");
+    }
   }
 }
 
@@ -765,12 +969,12 @@ function initPageIntro() {
    ============================================================ */
 // Цветовые темы для ambient glow каждого кейса
 const CASE_THEMES = [
-  // CASE 001 — Ландшафтное освещение: тёплый янтарь
-  { c1: "rgba(217,122,30,0.55)",  c2: "rgba(245,176,55,0.30)", dur1: "15s", dur2: "21s" },
-  // CASE 002 — Архитектурная подсветка: cream + amber
-  { c1: "rgba(237,232,225,0.20)", c2: "rgba(217,122,30,0.28)", dur1: "19s", dur2: "25s" },
-  // CASE 003 — Blueprint: холодный синий (в тон чертёжной сетке)
-  { c1: "rgba(72,140,220,0.38)",  c2: "rgba(100,180,255,0.22)", dur1: "13s", dur2: "18s" },
+  // CASE 001 — лунный свет на траве: мягкий серебристо-голубой
+  { c1: "rgba(106,170,216,0.50)",  c2: "rgba(160,210,240,0.28)", dur1: "15s", dur2: "21s" },
+  // CASE 002 — архитектурное свечение: жемчужный + лунный
+  { c1: "rgba(200,220,245,0.22)",  c2: "rgba(106,170,216,0.30)", dur1: "19s", dur2: "25s" },
+  // CASE 003 — глубокая ночь: насыщенный синий
+  { c1: "rgba(60,110,190,0.40)",   c2: "rgba(106,170,216,0.22)", dur1: "13s", dur2: "18s" },
 ];
 
 function initCases() {
@@ -782,9 +986,12 @@ function initCases() {
   const n = PORTFOLIO_ITEMS.length;
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-  // На десктопе задаём высоту обёртки: каждый кейс = 1.4vh прокрутки
+  // На десктопе задаём высоту обёртки под прокрутку кейсов.
+  // perCase ограничен сверху (110vh — комфортный темп) и снизу (70vh —
+  // чтобы при 10+ фото галерея не растянулась на десятки экранов).
   if (!isMobile) {
-    wrap.style.height = `${n * 140}vh`;
+    const perCase = Math.min(110, Math.max(70, Math.round(480 / n)));
+    wrap.style.height = `${n * perCase}vh`;
   }
 
   // Рендерим слайды
@@ -869,6 +1076,24 @@ function initCases() {
       <span class="cases-count__total">${String(n).padStart(2, "0")}</span>
     `;
     sticky.appendChild(count);
+
+    // Плавающая кнопка «К заявке» — выход из галереи в любой момент
+    const skip = document.createElement("a");
+    skip.className = "cases-skip";
+    skip.href = "#contact";
+    skip.setAttribute("aria-label", "Пропустить галерею и перейти к форме заявки");
+    skip.innerHTML = `
+      <span>К заявке</span>
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+    // Создаётся после initSmoothScroll — навешиваем плавный скролл вручную
+    skip.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    });
+    sticky.appendChild(skip);
   }
 
   // Dots
@@ -950,6 +1175,111 @@ function initCases() {
   }
 
   setCase(0);
+}
+
+/* ============================================================
+   ПРАЙС — аккордеон
+   ============================================================ */
+function initPricing() {
+  const wrap = document.getElementById("pricing-wrap");
+  if (!wrap) return;
+
+  PRICING_DATA.forEach((section) => {
+    // Заголовок раздела (Электромонтаж / Ландшафтное освещение)
+    const sectionEl = document.createElement("div");
+    sectionEl.className = "pricing-section";
+
+    const sectionHead = document.createElement("h3");
+    sectionHead.className = "pricing-section__label";
+    sectionHead.textContent = section.sectionLabel;
+    sectionEl.appendChild(sectionHead);
+
+    // Аккордеон-группы
+    section.groups.forEach((group, gi) => {
+      const item = document.createElement("div");
+      item.className = "accordion-item";
+
+      const btn = document.createElement("button");
+      btn.className = "accordion-btn";
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-controls", `acc-panel-${section.id}-${gi}`);
+      btn.id = `acc-btn-${section.id}-${gi}`;
+      btn.type = "button";
+      btn.innerHTML = `
+        <span class="accordion-btn__title">${group.title}</span>
+        <span class="accordion-btn__count">${group.rows.length} позиций</span>
+        <span class="accordion-btn__icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      `;
+
+      const panel = document.createElement("div");
+      panel.className = "accordion-panel";
+      panel.id = `acc-panel-${section.id}-${gi}`;
+      panel.setAttribute("role", "region");
+      panel.setAttribute("aria-labelledby", btn.id);
+      panel.hidden = true;
+
+      // Таблица цен
+      const table = document.createElement("table");
+      table.className = "price-table";
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th scope="col">Наименование работы</th>
+            <th scope="col" class="price-table__unit">Ед.</th>
+            <th scope="col" class="price-table__price">Цена, ₽</th>
+          </tr>
+        </thead>
+      `;
+      const tbody = document.createElement("tbody");
+      group.rows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.name}</td>
+          <td class="price-table__unit">${row.unit}</td>
+          <td class="price-table__price">${row.price.toLocaleString("ru-RU")}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      panel.appendChild(table);
+
+      // Открытие / закрытие
+      btn.addEventListener("click", () => {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        panel.hidden = expanded;
+        item.classList.toggle("is-open", !expanded);
+      });
+
+      // Клавиатурная навигация внутри секции
+      btn.addEventListener("keydown", (e) => {
+        const btns = [...sectionEl.querySelectorAll(".accordion-btn")];
+        const idx = btns.indexOf(btn);
+        if (e.key === "ArrowDown") { e.preventDefault(); btns[(idx + 1) % btns.length]?.focus(); }
+        if (e.key === "ArrowUp")   { e.preventDefault(); btns[(idx - 1 + btns.length) % btns.length]?.focus(); }
+        if (e.key === "Home")      { e.preventDefault(); btns[0]?.focus(); }
+        if (e.key === "End")       { e.preventDefault(); btns[btns.length - 1]?.focus(); }
+      });
+
+      item.appendChild(btn);
+      item.appendChild(panel);
+      sectionEl.appendChild(item);
+    });
+
+    // Примечание по разделу
+    if (section.note) {
+      const note = document.createElement("p");
+      note.className = "pricing-section__note";
+      note.textContent = section.note;
+      sectionEl.appendChild(note);
+    }
+
+    wrap.appendChild(sectionEl);
+  });
 }
 
 /* ============================================================
