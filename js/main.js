@@ -6,9 +6,10 @@ const SITE_CONFIG = {
     name: "Lumoon",
     nameEn: "Lumoon",
     tagline: "Строим пространство, в котором хочется жить",
-    description: "Строительная бригада из Костромы. Благоустройство, ландшафтное освещение, архитектурная подсветка.",
+    description: "Строительная компания из Костромы. Благоустройство, ландшафтное освещение, архитектурная подсветка и электромонтаж. Работаем в Костроме, Ярославле, Иванове, Вологде, Владимире, Твери, Нижнем Новгороде и Москве.",
     founded: "2026",
     city: "Кострома",
+    regions: ["Кострома", "Ярославль", "Иваново", "Вологда", "Владимир", "Тверь", "Нижний Новгород", "Москва"],
     legalName: "ИП Лубнин Матфей Николаевич",
     inn: "441403203883",
   },
@@ -37,32 +38,32 @@ const PORTFOLIO_ITEMS = [
   {
     id: 1,
     src: "assets/portfolio/work-01.jpg",
-    title: "Подсветка стены и газона",
-    description: "Янтарная грунтовая подсветка газона вдоль каменной стены. Создаёт тёплый акцент в вечернем ландшафте.",
+    title: "Вечерняя подсветка загородного сада",
+    description: "Вечерняя подсветка раскрывает объём сада. Нейтральный свет дорожек сочетается с тёплым свечением крон. Подчёркнута фактура камня и рельеф участка.",
     category: "Ландшафтное освещение",
-    location: "Кострома, частный дом",
+    location: "Загородный дом, Костромская область",
     caseNum: "CASE 001",
-    year: "2023",
+    year: "2024",
   },
   {
     id: 2,
     src: "assets/portfolio/work-02.jpg",
-    title: "Зона у бассейна",
-    description: "Тёплая подсветка колонн и перголы. Атмосфера средиземноморского вечера в центральной России.",
-    category: "Архитектурная подсветка",
-    location: "Костромская область",
+    title: "Классический сад со скрытой LED-подсветкой",
+    description: "Скрытая LED-подсветка подпорной стенки и акцент на зелени. Создали плавный переход света, подчеркнули фактуру растений и обеспечили безопасность передвижения по настилу.",
+    category: "Ландшафтное освещение",
+    location: "Загородный участок, Ярославская область",
     caseNum: "CASE 002",
-    year: "2024",
+    year: "2025",
   },
   {
     id: 3,
     src: "assets/portfolio/work-03.jpg",
-    title: "Архитектурная подсветка деревьев",
-    description: "Пурпурная и розовая подсветка деревьев у фасада. Ночной образ объекта, узнаваемый издалека.",
-    category: "Архитектурное освещение",
-    location: "Кострома, коммерческий объект",
+    title: "Уютная костровая зона для загородного отдыха",
+    description: "Костровая зона с качелями для загородного отдыха. Пространство создано для душевных встреч и расслабления в кругу близких.",
+    category: "Благоустройство территории",
+    location: "Кострома, дер. Кузьмище",
     caseNum: "CASE 003",
-    year: "2024",
+    year: "2025",
   },
 ];
 
@@ -70,6 +71,28 @@ const PORTFOLIO_ITEMS = [
    ДАННЫЕ ПРАЙСА
    ============================================================ */
 const PRICING_DATA = [
+  {
+    id: "landscape-light",
+    sectionLabel: "Ландшафтное освещение",
+    note: "Дополнительные работы по ландшафтному освещению — 650 ₽ / час·чел. Работы внутри здания рассчитываются по разделу «Электромонтажные работы».",
+    groups: [
+      {
+        title: "Ландшафтное освещение",
+        rows: [
+          { name: "Копка траншеи (0,6 м)",                                         unit: "м.п.", price: 450  },
+          { name: "Выемка грунта вручную",                                         unit: "м³",   price: 2500 },
+          { name: "Прокладка кабеля открытым способом в гофре",                   unit: "м.п.", price: 225  },
+          { name: "Укладка кабеля в гофре в траншею",                             unit: "м.п.", price: 300  },
+          { name: "Установка ландшафтных светильников в грунт с подключением",    unit: "ед.",  price: 1200 },
+          { name: "Монтаж светодиодной ленты в профиле",                          unit: "м.п.", price: 1500 },
+          { name: "Монтаж навесных светильников с подключением",                  unit: "ед.",  price: 800  },
+          { name: "Установка и расключение распаечной коробки (в грунт)",         unit: "ед.",  price: 1500 },
+          { name: "Установка и подключение наружного выключателя",                unit: "ед.",  price: 500  },
+          { name: "Монтаж распределительного щита",                               unit: "ед.",  price: 5000 },
+        ],
+      },
+    ],
+  },
   {
     id: "elektro",
     sectionLabel: "Электромонтажные работы",
@@ -231,26 +254,10 @@ const PRICING_DATA = [
     ],
   },
   {
-    id: "landscape-light",
-    sectionLabel: "Ландшафтное освещение",
-    note: "Дополнительные работы по ландшафтному освещению — 650 ₽ / час·чел. Работы внутри здания рассчитываются по разделу «Электромонтаж».",
-    groups: [
-      {
-        title: "Ландшафтное освещение",
-        rows: [
-          { name: "Копка траншеи (0,6 м)",                                         unit: "м.п.", price: 450  },
-          { name: "Выемка грунта вручную",                                         unit: "м³",   price: 2500 },
-          { name: "Прокладка кабеля открытым способом в гофре",                   unit: "м.п.", price: 225  },
-          { name: "Укладка кабеля в гофре в траншею",                             unit: "м.п.", price: 300  },
-          { name: "Установка ландшафтных светильников в грунт с подключением",    unit: "ед.",  price: 1200 },
-          { name: "Монтаж светодиодной ленты в профиле",                          unit: "м.п.", price: 1500 },
-          { name: "Монтаж навесных светильников с подключением",                  unit: "ед.",  price: 800  },
-          { name: "Установка и расключение распаечной коробки (в грунт)",         unit: "ед.",  price: 1500 },
-          { name: "Установка и подключение наружного выключателя",                unit: "ед.",  price: 500  },
-          { name: "Монтаж распределительного щита",                               unit: "ед.",  price: 5000 },
-        ],
-      },
-    ],
+    id: "blagoustroystvo",
+    sectionLabel: "Благоустройство территории",
+    comingSoon: true,
+    placeholder: "Подробный прайс на благоустройство сейчас готовится и скоро появится на сайте. Стоимость рассчитываем индивидуально после бесплатного выезда на участок — оставьте заявку, и мы подготовим смету под ваш проект.",
   },
 ];
 
@@ -549,20 +556,18 @@ function initMarquee() {
   if (!track) return;
 
   const items = [
-    "Благоустройство территорий",
-    "Ландшафтное освещение",
-    "Архитектурная подсветка",
     "Кострома",
-    "Костромская область",
-    "Террасы и беседки",
-    "Заборы и ограждения",
-    "Lumoon · свет и форма",
-    "Гарантия 3 года",
-    "Бесплатный замер",
+    "Ярославль",
+    "Иваново",
+    "Вологда",
+    "Владимир",
+    "Тверь",
+    "Нижний Новгород",
+    "Москва",
   ];
 
-  /* Дублируем для бесшовного loop */
-  const doubled = [...items, ...items];
+  /* Дублируем для бесшовного loop (4× — городов мало, нужно заполнить ширину) */
+  const doubled = [...items, ...items, ...items, ...items];
   track.innerHTML = doubled
     .map((t) => `<span class="marquee-item">${t}</span>`)
     .join("");
@@ -733,21 +738,27 @@ function renderLightboxSlide() {
    ============================================================ */
 const TESTIMONIALS = [
   {
-    name: "Александр К.",
-    role: "Владелец частного дома, Кострома",
-    text: "Команда «Lumoon» полностью преобразила наш участок. Подсветка дорожек и фасада — выше всяких ожиданий. Работали аккуратно, в срок, без лишних вопросов.",
+    name: "Сергей и Ольга",
+    role: "Загородный дом, Костромская область",
+    text: "Долго сомневались, нужна ли подсветка участка — теперь не представляем, как без неё жили. Вечером сад выглядит совсем иначе: дорожки светятся ровным нейтральным светом, кроны деревьев — тёплым, даже камень у крыльца «заиграл». Приехали на замер через день после звонка, сделали всё за неделю и оставили после себя порядок.",
     rating: 5,
   },
   {
-    name: "Марина Е.",
-    role: "Коттеджный посёлок «Берег»",
-    text: "Заказывали благоустройство общей зоны: дорожки, газон, декоративное освещение. Всё сделано качественно, проект согласовали быстро. Жильцы очень довольны.",
+    name: "Анна В.",
+    role: "Загородный участок, Ярославская область",
+    text: "Хотела, чтобы вечером в саду был свет, но самих светильников видно не было. Ребята предложили скрытую LED-ленту вдоль подпорной стенки — получилось именно то, о чём мечтала: зелень подсвечена, по настилу ходить безопасно, а откуда свет — гости так и не поняли. Отдельное спасибо за терпение к моим бесконечным правкам.",
     rating: 5,
   },
   {
-    name: "Дмитрий П.",
-    role: "Ресторан «Горожане»",
-    text: "Архитектурная подсветка фасада дала нам совершенно новый образ. Теперь вечером к нам заходят люди, которые просто проходили мимо — увидели свет.",
+    name: "Михаил Д.",
+    role: "Кострома, дер. Кузьмище",
+    text: "Заказывал костровую зону у дома. Честно, ожидал просто «кострище с гравием», а получил полноценное место отдыха с качелями, куда теперь первым делом идут все гости. Работали аккуратно: газон вокруг не разворотили, кромку выложили ровно, по срокам уложились день в день.",
+    rating: 5,
+  },
+  {
+    name: "Игорь С.",
+    role: "Электромонтаж в доме, Кострома",
+    text: "Делали полную разводку электрики в новом доме. Понравилось, что смета была расписана по позициям до начала работ — и в итоге не выросла ни на рубль. Щит собрали красиво, все линии подписаны, после себя всё убрали. Через месяц попросил добавить розетки в гараже — приехали без разговоров.",
     rating: 5,
   },
 ];
@@ -1184,102 +1195,120 @@ function initPricing() {
   const wrap = document.getElementById("pricing-wrap");
   if (!wrap) return;
 
+  // Три основных пункта: каждый раздел — один аккордеон
+  const sectionEl = document.createElement("div");
+  sectionEl.className = "pricing-section";
+
   PRICING_DATA.forEach((section) => {
-    // Заголовок раздела (Электромонтаж / Ландшафтное освещение)
-    const sectionEl = document.createElement("div");
-    sectionEl.className = "pricing-section";
+    const item = document.createElement("div");
+    item.className = "accordion-item accordion-item--main";
 
-    const sectionHead = document.createElement("h3");
-    sectionHead.className = "pricing-section__label";
-    sectionHead.textContent = section.sectionLabel;
-    sectionEl.appendChild(sectionHead);
+    const totalRows = (section.groups || []).reduce((sum, g) => sum + g.rows.length, 0);
+    const countLabel = section.comingSoon ? "смета по запросу" : `${totalRows} позиций`;
 
-    // Аккордеон-группы
-    section.groups.forEach((group, gi) => {
-      const item = document.createElement("div");
-      item.className = "accordion-item";
+    const btn = document.createElement("button");
+    btn.className = "accordion-btn";
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", `acc-panel-${section.id}`);
+    btn.id = `acc-btn-${section.id}`;
+    btn.type = "button";
+    btn.innerHTML = `
+      <span class="accordion-btn__title">${section.sectionLabel}</span>
+      <span class="accordion-btn__count">${countLabel}</span>
+      <span class="accordion-btn__icon" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    `;
 
-      const btn = document.createElement("button");
-      btn.className = "accordion-btn";
-      btn.setAttribute("aria-expanded", "false");
-      btn.setAttribute("aria-controls", `acc-panel-${section.id}-${gi}`);
-      btn.id = `acc-btn-${section.id}-${gi}`;
-      btn.type = "button";
-      btn.innerHTML = `
-        <span class="accordion-btn__title">${group.title}</span>
-        <span class="accordion-btn__count">${group.rows.length} позиций</span>
-        <span class="accordion-btn__icon" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
+    const panel = document.createElement("div");
+    panel.className = "accordion-panel";
+    panel.id = `acc-panel-${section.id}`;
+    panel.setAttribute("role", "region");
+    panel.setAttribute("aria-labelledby", btn.id);
+    panel.hidden = true;
+
+    if (section.comingSoon) {
+      // Раздел-заглушка: прайс появится позже, смета — по заявке
+      const ph = document.createElement("div");
+      ph.className = "pricing-placeholder";
+      ph.innerHTML = `
+        <p>${section.placeholder}</p>
+        <a href="#contact" class="btn btn--outline">Получить смету</a>
       `;
+      ph.querySelector("a").addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      });
+      panel.appendChild(ph);
+    } else {
+      section.groups.forEach((group) => {
+        // Подзаголовок группы — только если групп несколько
+        if (section.groups.length > 1) {
+          const groupTitle = document.createElement("h4");
+          groupTitle.className = "price-group__title";
+          groupTitle.textContent = group.title;
+          panel.appendChild(groupTitle);
+        }
 
-      const panel = document.createElement("div");
-      panel.className = "accordion-panel";
-      panel.id = `acc-panel-${section.id}-${gi}`;
-      panel.setAttribute("role", "region");
-      panel.setAttribute("aria-labelledby", btn.id);
-      panel.hidden = true;
-
-      // Таблица цен
-      const table = document.createElement("table");
-      table.className = "price-table";
-      table.innerHTML = `
-        <thead>
-          <tr>
-            <th scope="col">Наименование работы</th>
-            <th scope="col" class="price-table__unit">Ед.</th>
-            <th scope="col" class="price-table__price">Цена, ₽</th>
-          </tr>
-        </thead>
-      `;
-      const tbody = document.createElement("tbody");
-      group.rows.forEach((row) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${row.name}</td>
-          <td class="price-table__unit">${row.unit}</td>
-          <td class="price-table__price">${row.price.toLocaleString("ru-RU")}</td>
+        const table = document.createElement("table");
+        table.className = "price-table";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th scope="col">Наименование работы</th>
+              <th scope="col" class="price-table__unit">Ед.</th>
+              <th scope="col" class="price-table__price">Цена, ₽</th>
+            </tr>
+          </thead>
         `;
-        tbody.appendChild(tr);
-      });
-      table.appendChild(tbody);
-      panel.appendChild(table);
-
-      // Открытие / закрытие
-      btn.addEventListener("click", () => {
-        const expanded = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!expanded));
-        panel.hidden = expanded;
-        item.classList.toggle("is-open", !expanded);
-      });
-
-      // Клавиатурная навигация внутри секции
-      btn.addEventListener("keydown", (e) => {
-        const btns = [...sectionEl.querySelectorAll(".accordion-btn")];
-        const idx = btns.indexOf(btn);
-        if (e.key === "ArrowDown") { e.preventDefault(); btns[(idx + 1) % btns.length]?.focus(); }
-        if (e.key === "ArrowUp")   { e.preventDefault(); btns[(idx - 1 + btns.length) % btns.length]?.focus(); }
-        if (e.key === "Home")      { e.preventDefault(); btns[0]?.focus(); }
-        if (e.key === "End")       { e.preventDefault(); btns[btns.length - 1]?.focus(); }
+        const tbody = document.createElement("tbody");
+        group.rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.name}</td>
+            <td class="price-table__unit">${row.unit}</td>
+            <td class="price-table__price">${row.price.toLocaleString("ru-RU")}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        panel.appendChild(table);
       });
 
-      item.appendChild(btn);
-      item.appendChild(panel);
-      sectionEl.appendChild(item);
-    });
-
-    // Примечание по разделу
-    if (section.note) {
-      const note = document.createElement("p");
-      note.className = "pricing-section__note";
-      note.textContent = section.note;
-      sectionEl.appendChild(note);
+      if (section.note) {
+        const note = document.createElement("p");
+        note.className = "pricing-section__note";
+        note.textContent = section.note;
+        panel.appendChild(note);
+      }
     }
 
-    wrap.appendChild(sectionEl);
+    // Открытие / закрытие
+    btn.addEventListener("click", () => {
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!expanded));
+      panel.hidden = expanded;
+      item.classList.toggle("is-open", !expanded);
+    });
+
+    // Клавиатурная навигация между пунктами
+    btn.addEventListener("keydown", (e) => {
+      const btns = [...sectionEl.querySelectorAll(".accordion-btn")];
+      const idx = btns.indexOf(btn);
+      if (e.key === "ArrowDown") { e.preventDefault(); btns[(idx + 1) % btns.length]?.focus(); }
+      if (e.key === "ArrowUp")   { e.preventDefault(); btns[(idx - 1 + btns.length) % btns.length]?.focus(); }
+      if (e.key === "Home")      { e.preventDefault(); btns[0]?.focus(); }
+      if (e.key === "End")       { e.preventDefault(); btns[btns.length - 1]?.focus(); }
+    });
+
+    item.appendChild(btn);
+    item.appendChild(panel);
+    sectionEl.appendChild(item);
   });
+
+  wrap.appendChild(sectionEl);
 }
 
 /* ============================================================
