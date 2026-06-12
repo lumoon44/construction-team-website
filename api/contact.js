@@ -51,12 +51,11 @@ module.exports = async function handler(req, res) {
     date: now,
   };
 
-  // Письмо, Telegram и сохранение в базу — параллельно;
+  // Письмо и Telegram — параллельно;
   // заявка считается доставленной, если сработал хотя бы один канал
-  const [emailResult, telegramResult, storeResult] = await Promise.allSettled([
+  const [emailResult, telegramResult] = await Promise.allSettled([
     sendEmail(lead),
     notifyTelegram(lead),
-    saveLead(lead),
   ]);
 
   if (emailResult.status === "rejected") {
@@ -64,9 +63,6 @@ module.exports = async function handler(req, res) {
   }
   if (telegramResult.status === "rejected") {
     console.error("Telegram error:", telegramResult.reason);
-  }
-  if (storeResult.status === "rejected") {
-    console.error("Redis error:", storeResult.reason);
   }
 
   const delivered =
@@ -80,15 +76,8 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({ ok: true });
 };
 
-// Сохраняем заявку в Upstash Redis (последние 200)
-async function saveLead(lead) {
-  if (!redisConfigured()) return false;
-  await redis("LPUSH", "leads", JSON.stringify(lead));
-  await redis("LTRIM", "leads", "0", "199");
-  return true;
-}
-
-// Уведомление владельцу (TELEGRAM_CHAT_ID) и всем, кто авторизовался в боте по паролю
+// Уведомление владельцу (TELEGRAM_CHAT_ID) и всем, кто авторизовался в боте по паролю.
+// Заявки нигде не сохраняются — в Redis лежат только ID чатов (152-ФЗ)
 async function notifyTelegram(lead) {
   const text = [
     "🔔 <b>Lumoon — новая заявка</b>",

@@ -1,12 +1,8 @@
-const {
-  redis,
-  redisConfigured,
-  sendTelegramMessage,
-  escapeHtml,
-} = require("./_lib");
+const { redis, redisConfigured, sendTelegramMessage } = require("./_lib");
 
-// Webhook Telegram-бота: авторизация по паролю (BOT_PASSWORD)
-// и просмотр последних заявок командой /leads или словом «заявки»
+// Webhook Telegram-бота: авторизация по паролю (BOT_PASSWORD).
+// После ввода пароля чат добавляется в рассылку новых заявок.
+// В Redis хранятся только ID чатов — никаких данных клиентов (152-ФЗ).
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -39,20 +35,21 @@ async function handleMessage(chatId, text) {
   if (!redisConfigured()) {
     return sendTelegramMessage(
       chatId,
-      "⚠️ Хранилище заявок не подключено (Upstash Redis). Обратитесь к администратору."
+      "⚠️ Хранилище не подключено (Upstash Redis). Обратитесь к администратору."
     );
   }
 
   const password = process.env.BOT_PASSWORD;
   const isOwner = String(chatId) === String(process.env.TELEGRAM_CHAT_ID);
   const isAuthorized =
-    isOwner || (await redis("SISMEMBER", "authorized_chats", String(chatId))) === 1;
+    isOwner ||
+    (await redis("SISMEMBER", "authorized_chats", String(chatId))) === 1;
 
   if (!isAuthorized) {
     if (text === "/start") {
       return sendTelegramMessage(
         chatId,
-        "🔒 Введите пароль, чтобы получить доступ к заявкам."
+        "🔒 Введите пароль, чтобы получать заявки с сайта."
       );
     }
     if (!password) {
@@ -65,53 +62,22 @@ async function handleMessage(chatId, text) {
       await redis("SADD", "authorized_chats", String(chatId));
       return sendTelegramMessage(
         chatId,
-        "✅ Доступ открыт!\n\nКоманды:\n• /leads — последние заявки\n• /logout — отключить доступ\n\nНовые заявки будут приходить сюда автоматически."
+        "✅ Готово! Новые заявки с сайта будут приходить в этот чат.\n\nОтключить: /logout"
       );
     }
     return sendTelegramMessage(chatId, "❌ Неверный пароль. Попробуйте ещё раз.");
   }
 
-  // Авторизованные команды
   if (text === "/logout") {
     await redis("SREM", "authorized_chats", String(chatId));
     return sendTelegramMessage(
       chatId,
-      "🔒 Доступ отключён. Чтобы вернуться — введите пароль."
+      "🔒 Рассылка отключена. Чтобы вернуться — введите пароль."
     );
   }
 
-  if (text === "/leads" || /заявк/i.test(text)) {
-    return sendLeads(chatId);
-  }
-
   return sendTelegramMessage(
     chatId,
-    "Команды:\n• /leads — последние заявки\n• /logout — отключить доступ"
-  );
-}
-
-async function sendLeads(chatId) {
-  const raw = (await redis("LRANGE", "leads", "0", "9")) || [];
-  if (raw.length === 0) {
-    return sendTelegramMessage(chatId, "📭 Заявок пока нет.");
-  }
-
-  const items = raw.map((item, i) => {
-    let lead;
-    try {
-      lead = JSON.parse(item);
-    } catch {
-      return `${i + 1}. (не удалось прочитать запись)`;
-    }
-    return [
-      `<b>${i + 1}. ${escapeHtml(lead.name)}</b> — ${escapeHtml(lead.phone)}`,
-      `💬 ${escapeHtml(lead.message)}`,
-      `🕐 ${escapeHtml(lead.date)}`,
-    ].join("\n");
-  });
-
-  return sendTelegramMessage(
-    chatId,
-    `📋 <b>Последние заявки (${raw.length}):</b>\n\n${items.join("\n\n")}`
+    "✅ Вы получаете заявки с сайта.\nОтключить рассылку: /logout"
   );
 }
