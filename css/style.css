@@ -580,6 +580,9 @@ button { font: inherit; cursor: none; border: none; background: none; }
   min-height: 100svh;
   display: flex;
   align-items: flex-end;
+  /* отступ под фиксированную шапку: если контент выше экрана,
+     он не заезжает под логотип, а секция просто растягивается */
+  padding-top: 120px;
   padding-bottom: var(--space-24);
   overflow: hidden;
 }
@@ -1850,6 +1853,9 @@ button { font: inherit; cursor: none; border: none; background: none; }
 @media (max-width: 540px) {
   .process-steps { grid-template-columns: 1fr; }
   .process-step__num { font-size: 3.5rem; }
+  .hero { padding-top: 100px; }
+  .hero__title { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+  .hero__eyebrow { font-size: 9px; letter-spacing: 0.18em; }
 }
 
 /* add space-10 token */
