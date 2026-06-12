@@ -38,8 +38,33 @@ module.exports = async function handler(req, res) {
     timeStyle: "short",
   });
 
-  try {
-    await resend.emails.send({
+  // Отправляем письмо и сообщение в Telegram параллельно;
+  // заявка считается доставленной, если сработал хотя бы один канал
+  const [emailResult, telegramResult] = await Promise.allSettled([
+    sendEmail({ name, phone, message, now }),
+    sendTelegram({ name, phone, message, now }),
+  ]);
+
+  if (emailResult.status === "rejected") {
+    console.error("Resend error:", emailResult.reason);
+  }
+  if (telegramResult.status === "rejected") {
+    console.error("Telegram error:", telegramResult.reason);
+  }
+
+  const delivered =
+    emailResult.status === "fulfilled" ||
+    (telegramResult.status === "fulfilled" && telegramResult.value);
+
+  if (!delivered) {
+    return res.status(500).json({ error: "Ошибка отправки, попробуйте позже" });
+  }
+
+  return res.status(200).json({ ok: true });
+};
+
+function sendEmail({ name, phone, message, now }) {
+  return resend.emails.send({
       from: FROM_EMAIL,
       to: TO_EMAIL,
       subject: `Новая заявка с сайта — ${String(name).trim()}`,
@@ -73,14 +98,43 @@ module.exports = async function handler(req, res) {
           </div>
         </div>
       `,
-    });
+  });
+}
 
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error("Resend error:", err);
-    return res.status(500).json({ error: "Ошибка отправки, попробуйте позже" });
+// Уведомление в Telegram — работает, если заданы TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID
+async function sendTelegram({ name, phone, message, now }) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return false;
+
+  const text = [
+    "🔔 <b>Lumoon — новая заявка</b>",
+    "",
+    `👤 <b>Имя:</b> ${escapeHtml(name)}`,
+    `📞 <b>Телефон:</b> ${escapeHtml(phone)}`,
+    `💬 <b>Сообщение:</b> ${escapeHtml(message)}`,
+    "",
+    `🕐 ${now}`,
+  ].join("\n");
+
+  const response = await fetch(
+    `https://api.telegram.org/bot${token}/sendMessage`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Telegram API: ${response.status} ${await response.text()}`);
   }
-};
+  return true;
+}
 
 function escapeHtml(str) {
   return String(str)
