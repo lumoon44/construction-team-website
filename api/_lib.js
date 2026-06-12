@@ -1,8 +1,31 @@
 // Общие помощники для serverless-функций.
 // Файлы с подчёркиванием в начале Vercel не публикует как endpoint.
 
-// Upstash Redis через REST API (переменные добавляет интеграция Vercel → Storage)
+// Redis: либо прямое подключение по REDIS_URL (интеграция Vercel → Storage),
+// либо Upstash REST API (UPSTASH_REDIS_REST_URL / KV_REST_API_URL)
+const { createClient } = require("redis");
+
+let clientPromise = null;
+
+function getRedisClient() {
+  if (!clientPromise) {
+    clientPromise = createClient({ url: process.env.REDIS_URL })
+      .on("error", (err) => console.error("Redis client error:", err))
+      .connect()
+      .catch((err) => {
+        clientPromise = null;
+        throw err;
+      });
+  }
+  return clientPromise;
+}
+
 async function redis(...command) {
+  if (process.env.REDIS_URL) {
+    const client = await getRedisClient();
+    return client.sendCommand(command.map(String));
+  }
+
   const url =
     process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
   const token =
@@ -25,8 +48,10 @@ async function redis(...command) {
 
 function redisConfigured() {
   return Boolean(
-    (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) &&
-      (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN)
+    process.env.REDIS_URL ||
+      ((process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) &&
+        (process.env.UPSTASH_REDIS_REST_TOKEN ||
+          process.env.KV_REST_API_TOKEN))
   );
 }
 
