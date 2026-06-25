@@ -9,7 +9,7 @@ const {
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Адрес, куда приходят заявки
-const TO_EMAIL = process.env.TO_EMAIL || "lumoon44@outlook.com";
+const TO_EMAIL = process.env.TO_EMAIL || "44lumoon@gmail.com";
 
 // Адрес отправителя — после верификации домена замените на свой
 // например: "Lumoon <no-reply@lumoon44.ru>"
