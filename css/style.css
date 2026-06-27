@@ -1664,6 +1664,37 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .footer__legal a:hover { color: var(--color-text-muted); }
 
+/* Подпись студии-разработчика */
+.footer__credit {
+  margin-top: var(--space-6);
+  display: flex;
+  justify-content: center;
+}
+
+.footer__credit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.45;
+  transition: opacity var(--transition-base);
+}
+
+.footer__credit-link:hover { opacity: 1; }
+
+.footer__credit-text {
+  font-size: var(--size-xs);
+  color: var(--color-text-faint);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.footer__credit-logo {
+  height: 17px;
+  width: auto;
+  display: block;
+}
+
 /* ============================================================
    ЛАЙТБОКС
    ============================================================ */
