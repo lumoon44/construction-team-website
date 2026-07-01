@@ -886,10 +886,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
   50%      { box-shadow: 0 0 28px var(--color-promo-glow); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .promo-badge, .promo-badge__dot { animation: none !important; opacity: 1; }
-}
-
 @media (max-width: 640px) {
   .promo-badge { padding: var(--space-4); gap: var(--space-3); }
   .promo-badge__timer { order: 3; width: 100%; justify-content: flex-start; }
