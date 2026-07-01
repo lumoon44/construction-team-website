@@ -439,6 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactForm();
   initMagneticButtons();
   initCounters();
+  initPromoBadge();
 });
 
 /* ============================================================
@@ -1506,4 +1507,47 @@ function initCounters() {
   );
 
   counters.forEach((el) => observer.observe(el));
+}
+
+/* ============================================================
+   ПРОМО-ПЛАШКА: обратный отсчёт до конца акции
+   ============================================================ */
+function initPromoBadge() {
+  const badge = document.getElementById("promo-badge");
+  const timer = document.getElementById("promo-timer");
+  if (!badge || !timer) return;
+
+  const target = new Date(2026, 6, 7, 23, 59, 59); // 7 июля, конец дня
+
+  const els = {
+    days: timer.querySelector('[data-timer="days"]'),
+    hours: timer.querySelector('[data-timer="hours"]'),
+    mins: timer.querySelector('[data-timer="mins"]'),
+    secs: timer.querySelector('[data-timer="secs"]'),
+  };
+
+  const pad = (n) => String(n).padStart(2, "0");
+
+  function tick() {
+    const diff = target.getTime() - Date.now();
+
+    if (diff <= 0) {
+      badge.style.display = "none";
+      clearInterval(intervalId);
+      return;
+    }
+
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    els.days.textContent = pad(days);
+    els.hours.textContent = pad(hours);
+    els.mins.textContent = pad(mins);
+    els.secs.textContent = pad(secs);
+  }
+
+  tick();
+  const intervalId = setInterval(tick, 1000);
 }

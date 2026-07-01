@@ -778,6 +778,124 @@ button { font: inherit; cursor: none; border: none; background: none; }
   background: linear-gradient(to right, transparent, var(--color-accent));
 }
 
+/* ============================================================
+   ПРОМО-ПЛАШКА (акция)
+   ============================================================ */
+:root {
+  --color-promo:      #e2453f;
+  --color-promo-glow:  rgba(226, 69, 63, 0.35);
+}
+
+.promo-badge {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-8);
+  padding: var(--space-4) var(--space-6);
+  background: linear-gradient(135deg, rgba(226, 69, 63, 0.1), rgba(11, 13, 24, 0.6));
+  border: 1px solid rgba(226, 69, 63, 0.3);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  animation:
+    fadeUp 0.8s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    promoGlow 2.6s 1s ease-in-out infinite;
+}
+
+.promo-badge__dot {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-promo);
+  box-shadow: 0 0 0 0 var(--color-promo-glow);
+  animation: promoBlink 1.8s ease-in-out infinite;
+}
+
+.promo-badge__body {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.promo-badge__title {
+  font-family: var(--font-body);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.promo-badge__sub {
+  font-family: var(--font-body);
+  font-size: var(--size-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.promo-badge__sub strong {
+  color: var(--color-promo);
+  font-weight: 700;
+}
+
+.promo-badge__timer {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.promo-badge__timer-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+}
+
+.promo-badge__timer-unit span {
+  font-family: var(--font-body);
+  font-size: var(--size-md);
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.promo-badge__timer-unit small {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+
+.promo-badge__btn {
+  flex-shrink: 0;
+  padding: 0.7rem 1.6rem;
+  font-size: 11px;
+}
+
+@keyframes promoBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+
+@keyframes promoGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(226, 69, 63, 0); }
+  50%      { box-shadow: 0 0 28px var(--color-promo-glow); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-badge, .promo-badge__dot { animation: none !important; opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .promo-badge { padding: var(--space-4); gap: var(--space-3); }
+  .promo-badge__timer { order: 3; width: 100%; justify-content: flex-start; }
+  .promo-badge__btn { order: 4; width: 100%; justify-content: center; }
+}
+
 .hero__eyebrow {
   font-size: 10px;
   letter-spacing: 0.22em;
