@@ -67,6 +67,26 @@ const PORTFOLIO_ITEMS = [
   },
 ];
 
+// Порядок фото внутри лайтбокса (полноэкранный просмотр по клику).
+// Не совпадает 1:1 с PORTFOLIO_ITEMS: между кейсом 001 и кейсом 002
+// вставлено доп. фото, которое не выводится отдельной карточкой на странице —
+// его видно только при пролистывании лайтбокса.
+const LIGHTBOX_ITEMS = [
+  PORTFOLIO_ITEMS[0],
+  {
+    src: "assets/portfolio/lightbox-extra-01.jpg",
+    title: "Подсветка деревянного настила и бамбуковой изгороди",
+    description: "Скрытая LED-лента вдоль кромки настила и подсветка бамбука снизу вверх создают мягкий контражур у бассейна. Свет очерчивает геометрию террасы, не создавая бликов на воде.",
+    caseNum: "CASE 001+",
+  },
+  PORTFOLIO_ITEMS[1],
+  PORTFOLIO_ITEMS[2],
+];
+
+// Индекс в LIGHTBOX_ITEMS, с которого открывается лайтбокс при клике
+// на карточку кейса с соответствующим индексом в PORTFOLIO_ITEMS
+const CASE_TO_LIGHTBOX_INDEX = [0, 2, 3];
+
 /* ============================================================
    ДАННЫЕ ПРАЙСА
    ============================================================ */
@@ -854,12 +874,12 @@ function closeLightbox() {
 }
 
 function navigateLightbox(dir) {
-  lightboxCurrentIndex = (lightboxCurrentIndex + dir + PORTFOLIO_ITEMS.length) % PORTFOLIO_ITEMS.length;
+  lightboxCurrentIndex = (lightboxCurrentIndex + dir + LIGHTBOX_ITEMS.length) % LIGHTBOX_ITEMS.length;
   renderLightboxSlide();
 }
 
 function renderLightboxSlide() {
-  const item = PORTFOLIO_ITEMS[lightboxCurrentIndex];
+  const item = LIGHTBOX_ITEMS[lightboxCurrentIndex];
   const img = document.getElementById("lb-img");
   const caption = document.getElementById("lb-caption");
   const desc = document.getElementById("lb-desc");
@@ -886,7 +906,7 @@ function renderLightboxSlide() {
   }
   if (caption) caption.textContent = item.title;
   if (desc) desc.textContent = item.description;
-  if (counter) counter.textContent = `${lightboxCurrentIndex + 1} / ${PORTFOLIO_ITEMS.length}`;
+  if (counter) counter.textContent = `${lightboxCurrentIndex + 1} / ${LIGHTBOX_ITEMS.length}`;
 }
 
 /* ============================================================
@@ -1220,7 +1240,7 @@ function initCases() {
       bg.insertBefore(bp, bg.firstChild);
     });
 
-    slide.addEventListener("click", () => openLightbox(idx));
+    slide.addEventListener("click", () => openLightbox(CASE_TO_LIGHTBOX_INDEX[idx]));
     // Вставляем ДО блока с dots
     sticky.insertBefore(slide, dotsWrap);
   });
