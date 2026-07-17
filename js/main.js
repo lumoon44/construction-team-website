@@ -1537,7 +1537,7 @@ function initPromoBadge() {
   const timer = document.getElementById("promo-timer");
   if (!badge || !timer) return;
 
-  const target = new Date(2026, 6, 18, 23, 59, 59); // 18 июля, конец дня
+  const target = new Date(2026, 6, 31, 23, 59, 59); // 31 июля, конец месяца
 
   const els = {
     days: timer.querySelector('[data-timer="days"]'),
