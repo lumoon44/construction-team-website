@@ -440,7 +440,8 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .logo__name {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  /* Общий кегль с русским дублём: на мобильном оба уменьшаются пропорционально */
+  font-size: clamp(1.15rem, 4.6vw, 1.75rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   /* «Lu» — белый */
@@ -450,6 +451,18 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* «moon» — акцентный синий */
 .logo__name span {
   color: var(--color-accent);
+}
+
+/* Русский дубль названия (168-ФЗ) — равная заметность с «Lumoon»:
+   тот же шрифт, кегль, вес и цвет (базовый белый). */
+.logo__ru {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 4.6vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-paper);
+  white-space: nowrap;
 }
 
 .logo__sub {
@@ -469,6 +482,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   object-fit: contain;
 }
 .logo--has-image .logo__name,
+.logo--has-image .logo__ru,
 .logo--has-image .logo__sub,
 .logo--has-image .logo__icon { display: none; }
 
@@ -2057,7 +2071,12 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .page-intro__wordmark {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 16vw, 13rem);
+  /* Общий кегль с русским дублём ниже. vw-основа масштабирует оба
+     одинаково: LUMOON и «Ландшафтные решения» всегда равны по размеру
+     между собой, общий масштаб плавно уменьшается на мобильном.
+     Верхняя граница подобрана так, чтобы более длинная русская строка
+     помещалась в ширину экрана на десктопе. */
+  font-size: clamp(1.75rem, 9vw, 8rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -2066,6 +2085,21 @@ button { font: inherit; cursor: none; border: none; background: none; }
   transform: translateY(28px);
   transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Русский дубль на splash — строго равен «LUMOON» по кеглю/весу/цвету */
+.page-intro__ru {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 9vw, 8rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  color: var(--color-text);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s,
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
 }
 
 .page-intro__sub {
@@ -2080,7 +2114,8 @@ button { font: inherit; cursor: none; border: none; background: none; }
 }
 
 /* Visible state: logo fades in */
-.page-intro.is-visible .page-intro__wordmark {
+.page-intro.is-visible .page-intro__wordmark,
+.page-intro.is-visible .page-intro__ru {
   opacity: 1;
   transform: none;
 }
@@ -2785,7 +2820,10 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .footer__wordmark {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 18vw, 16rem);
+  /* Общий кегль с русским дублём ниже: vw-основа держит «LUMOON» и
+     «Ландшафтные решения» равными между собой на любом экране.
+     Верхняя граница подобрана под более длинную русскую строку. */
+  font-size: clamp(2.5rem, 11.5vw, 10rem);
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 0.88;
@@ -2810,6 +2848,28 @@ button { font: inherit; cursor: none; border: none; background: none; }
 
 .footer__wordmark:hover {
   opacity: 0.75;
+}
+
+/* Русский дубль в футере — строго равен «LUMOON» по кеглю/весу/цвету */
+.footer__wordmark-ru {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 11.5vw, 10rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  display: block;
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(140, 175, 220, 0.18) 0%,
+    rgba(200, 220, 240, 0.30) 50%,
+    rgba(140, 175, 220, 0.15) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translateZ(0);
+  user-select: none;
 }
 
 /* Разделитель */
