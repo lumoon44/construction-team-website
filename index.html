@@ -497,34 +497,55 @@
 
 
 <!-- ============================================================
-     5. ПОРТФОЛИО — fullscreen sticky cases
+     5. ПОРТФОЛИО — карусель работ
      ============================================================ -->
-<section class="cases-section" id="portfolio" aria-labelledby="portfolio-title">
+<section class="section" id="portfolio" aria-labelledby="portfolio-title">
+  <div class="container">
 
-  <div class="cases-intro container">
-    <p class="section-index" data-reveal>004 / Работы</p>
-    <p class="section-label" data-reveal data-reveal-delay="40">Избранные работы</p>
-    <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="100">
-      Примеры наших объектов
-    </h2>
-    <p class="section-subtitle" data-reveal data-reveal-delay="160">
-      Нажмите на проект, чтобы увидеть детали
-    </p>
-    <a href="#contact" class="cases-skip-link" data-reveal data-reveal-delay="220">
-      Пропустить галерею — сразу к заявке
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-  </div>
-
-  <div class="cases-sticky-wrap" id="cases-sticky-wrap">
-    <div class="cases-sticky" id="cases-sticky" aria-label="Галерея работ">
-      <!-- Cases rendered by JS from PORTFOLIO_ITEMS -->
-      <div class="cases-dots" id="cases-dots" aria-label="Навигация кейсов"></div>
+    <div style="max-width: 580px;">
+      <p class="section-index" data-reveal>004 / Работы</p>
+      <p class="section-label" data-reveal data-reveal-delay="40">Избранные работы</p>
+      <h2 class="section-title" id="portfolio-title" data-reveal data-reveal-delay="100">
+        Примеры наших объектов
+      </h2>
+      <p class="section-subtitle" data-reveal data-reveal-delay="160">
+        Листайте стрелками — нажмите на фото, чтобы открыть крупнее.
+      </p>
     </div>
-  </div>
 
+    <div class="works-carousel" id="works-carousel" data-reveal aria-label="Галерея работ">
+      <div class="works-carousel__viewport">
+        <div class="works-carousel__track" id="works-track" role="list">
+          <!-- Слайды рендерятся из PORTFOLIO_ITEMS -->
+        </div>
+      </div>
+
+      <button class="works-carousel__arrow works-carousel__arrow--prev" id="works-prev"
+              type="button" aria-label="Предыдущая работа">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="works-carousel__arrow works-carousel__arrow--next" id="works-next"
+              type="button" aria-label="Следующая работа">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="works-carousel__dots" id="works-dots" aria-label="Навигация работ"></div>
+    </div>
+
+    <div class="works-cta" data-reveal>
+      <a href="works.html" class="btn btn--outline works-gallery-btn">
+        Галерея наших работ
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
 </section>
 
 

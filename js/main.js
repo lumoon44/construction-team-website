@@ -510,8 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSplitText();      // учитывает intro-задержку через sessionStorage
   initMarquee();
   initPricing();        // аккордеон с прайсом
-  initCases();          // fullscreen sticky cases (заменяет initPortfolio)
-  initPortfolio();      // no-op если #portfolio-track отсутствует
+  initWorksCarousel();  // карусель работ
   initLightbox();
   initTestimonials();
   initContactForm();
@@ -830,81 +829,6 @@ function initMarquee() {
 }
 
 /* ============================================================
-   ПОРТФОЛИО — СЛАЙДЕР
-   ============================================================ */
-function initPortfolio() {
-  const track = document.getElementById("portfolio-track");
-  if (!track) return;
-
-  let current = 0;
-  let touchStartX = 0;
-
-  /* Render slides */
-  PORTFOLIO_ITEMS.forEach((item, idx) => {
-    const slide = document.createElement("div");
-    slide.className = "portfolio-slide";
-    slide.setAttribute("aria-label", item.title);
-
-    slide.innerHTML = `
-      <img
-        class="portfolio-slide__img"
-        src="${item.src}"
-        alt="${item.title} — ${item.category}"
-        loading="${idx === 0 ? 'eager' : 'lazy'}"
-        onerror="this.style.display='none'"
-      />
-      <div class="portfolio-slide__overlay">
-        <span class="portfolio-slide__case">${item.caseNum}</span>
-        <span class="portfolio-slide__cat">${item.category}</span>
-        <h3 class="portfolio-slide__title">${item.title}</h3>
-        <span class="portfolio-slide__loc">${item.location}</span>
-      </div>
-    `;
-
-    slide.addEventListener("click", () => openLightbox(idx));
-    track.appendChild(slide);
-  });
-
-  /* Dots */
-  const dotsWrap = document.getElementById("portfolio-dots");
-  PORTFOLIO_ITEMS.forEach((_, i) => {
-    const dot = document.createElement("button");
-    dot.className = "portfolio-dot";
-    dot.setAttribute("aria-label", `Проект ${i + 1}`);
-    dot.addEventListener("click", () => goTo(i));
-    dotsWrap?.appendChild(dot);
-  });
-
-  const dots = dotsWrap?.querySelectorAll(".portfolio-dot");
-  const counter = document.getElementById("portfolio-counter");
-
-  function goTo(index) {
-    current = ((index % PORTFOLIO_ITEMS.length) + PORTFOLIO_ITEMS.length) % PORTFOLIO_ITEMS.length;
-    track.style.transform = `translateX(-${current * 100}%)`;
-    dots?.forEach((d, i) => d.classList.toggle("is-active", i === current));
-    if (counter) {
-      counter.textContent = `${String(current + 1).padStart(2, "0")} / ${String(PORTFOLIO_ITEMS.length).padStart(2, "0")}`;
-    }
-  }
-
-  document.getElementById("portfolio-prev")?.addEventListener("click", () => goTo(current - 1));
-  document.getElementById("portfolio-next")?.addEventListener("click", () => goTo(current + 1));
-
-  /* Touch swipe */
-  const sliderEl = document.getElementById("portfolio-slider");
-  sliderEl?.addEventListener("touchstart", (e) => {
-    touchStartX = e.touches[0].clientX;
-  }, { passive: true });
-
-  sliderEl?.addEventListener("touchend", (e) => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
-  }, { passive: true });
-
-  goTo(0);
-}
-
-/* ============================================================
    ЛАЙТБОКС
    ============================================================ */
 let lightboxCurrentIndex = 0;
@@ -1190,216 +1114,76 @@ function initPageIntro() {
 }
 
 /* ============================================================
-   FULLSCREEN CASES — sticky scroll storytelling
+   ПОРТФОЛИО — карусель работ (стрелки / точки / свайп)
    ============================================================ */
-// Цветовые темы для ambient glow каждого кейса
-const CASE_THEMES = [
-  // CASE 001 — лунный свет на траве: мягкий серебристо-голубой
-  { c1: "rgba(106,170,216,0.50)",  c2: "rgba(160,210,240,0.28)", dur1: "15s", dur2: "21s" },
-  // CASE 002 — архитектурное свечение: жемчужный + лунный
-  { c1: "rgba(200,220,245,0.22)",  c2: "rgba(106,170,216,0.30)", dur1: "19s", dur2: "25s" },
-  // CASE 003 — глубокая ночь: насыщенный синий
-  { c1: "rgba(60,110,190,0.40)",   c2: "rgba(106,170,216,0.22)", dur1: "13s", dur2: "18s" },
-];
-
-function initCases() {
-  const wrap   = document.getElementById("cases-sticky-wrap");
-  const sticky = document.getElementById("cases-sticky");
-  const dotsWrap = document.getElementById("cases-dots");
-  if (!wrap || !sticky) return;
+function initWorksCarousel() {
+  const track = document.getElementById("works-track");
+  const dotsWrap = document.getElementById("works-dots");
+  if (!track) return;
 
   const n = PORTFOLIO_ITEMS.length;
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  let current = 0;
 
-  // На десктопе задаём высоту обёртки под прокрутку кейсов.
-  // perCase ограничен сверху (110vh — комфортный темп) и снизу (70vh —
-  // чтобы при 10+ фото галерея не растянулась на десятки экранов).
-  if (!isMobile) {
-    const perCase = Math.min(110, Math.max(70, Math.round(480 / n)));
-    wrap.style.height = `${n * perCase}vh`;
-  }
-
-  // Рендерим слайды
   PORTFOLIO_ITEMS.forEach((item, idx) => {
-    const theme = CASE_THEMES[idx] || CASE_THEMES[0];
     const slide = document.createElement("div");
-    slide.className = "case-slide" + (idx === 0 ? " is-active" : "");
-    slide.setAttribute("role", "article");
+    slide.className = "works-slide";
+    slide.setAttribute("role", "listitem");
     slide.setAttribute("aria-label", item.title);
-
-    // Инлайн CSS-переменные для уникального glow каждого кейса
-    slide.style.cssText = `
-      --glow-c1: ${theme.c1};
-      --glow-c2: ${theme.c2};
-      --glow-dur1: ${theme.dur1};
-      --glow-dur2: ${theme.dur2};
-    `;
-
     slide.innerHTML = `
-      <div class="case-slide__bg">
-        <img
-          class="case-slide__img"
-          src="${item.src}"
-          alt="${item.title} — ${item.category}"
-          loading="${idx === 0 ? "eager" : "lazy"}"
-        />
-        <div class="case-slide__glow" aria-hidden="true">
-          <span class="case-slide__glow-blob case-slide__glow-blob--a"></span>
-          <span class="case-slide__glow-blob case-slide__glow-blob--b"></span>
-          <span class="case-slide__glow-blob case-slide__glow-blob--c"></span>
-        </div>
-        <div class="case-slide__overlay"></div>
-      </div>
-      <div class="case-slide__meta-top">
-        <span class="case-slide__year">${item.year}</span>
-        <span class="case-slide__loc-top">${item.location}</span>
-      </div>
-      <div class="case-slide__content">
-        <span class="case-slide__num">${item.caseNum}</span>
-        <span class="case-slide__cat">${item.category}</span>
-        <h3 class="case-slide__title">${item.title}</h3>
+      <div class="works-slide__bg" style="background-image:url('${item.src}')" aria-hidden="true"></div>
+      <img
+        class="works-slide__img"
+        src="${item.src}"
+        alt="${item.title} — ${item.category}"
+        loading="${idx === 0 ? "eager" : "lazy"}"
+      />
+      <div class="works-slide__scrim" aria-hidden="true"></div>
+      <div class="works-slide__meta">
+        <span class="works-slide__num">${item.caseNum}</span>
+        <span class="works-slide__cat">${item.category}</span>
+        <h3 class="works-slide__title">${item.title}</h3>
+        <span class="works-slide__loc">${item.location}</span>
       </div>
     `;
-
-    // Blueprint fallback — когда фото нет или 404
-    slide.querySelector(".case-slide__img").addEventListener("error", (e) => {
-      e.currentTarget.style.display = "none";
-      slide.classList.add("has-blueprint");
-      const bg = slide.querySelector(".case-slide__bg");
-      const bp = document.createElement("div");
-      bp.className = "case-slide__blueprint";
-      bp.setAttribute("aria-hidden", "true");
-      bp.innerHTML = `
-        <div class="bp-reticle">
-          <span class="bp-ch bp-ch--h"></span>
-          <span class="bp-ch bp-ch--v"></span>
-          <span class="bp-dot"></span>
-        </div>`;
-      bg.insertBefore(bp, bg.firstChild);
+    slide.addEventListener("click", () => {
+      if (swiped) { swiped = false; return; }
+      openLightbox(CASE_TO_LIGHTBOX_INDEX[idx] ?? 0);
     });
-
-    slide.addEventListener("click", () => openLightbox(CASE_TO_LIGHTBOX_INDEX[idx]));
-    // Вставляем ДО блока с dots
-    sticky.insertBefore(slide, dotsWrap);
+    track.appendChild(slide);
   });
 
-  // Scroll-hint (desktop only)
-  if (!isMobile) {
-    const hint = document.createElement("div");
-    hint.className = "cases-hint";
-    hint.innerHTML = `<div class="cases-hint__line"></div><span class="cases-hint__text">Scroll</span>`;
-    sticky.appendChild(hint);
-
-    // Слайд-каунтер «01 / 03» (desktop only)
-    const count = document.createElement("div");
-    count.className = "cases-count";
-    count.id = "cases-count";
-    count.setAttribute("aria-live", "polite");
-    count.innerHTML = `
-      <span class="cases-count__current">01</span>
-      <span class="cases-count__sep">/</span>
-      <span class="cases-count__total">${String(n).padStart(2, "0")}</span>
-    `;
-    sticky.appendChild(count);
-
-    // Плавающая кнопка «К заявке» — выход из галереи в любой момент
-    const skip = document.createElement("a");
-    skip.className = "cases-skip";
-    skip.href = "#contact";
-    skip.setAttribute("aria-label", "Пропустить галерею и перейти к форме заявки");
-    skip.innerHTML = `
-      <span>К заявке</span>
-      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    `;
-    // Создаётся после initSmoothScroll — навешиваем плавный скролл вручную
-    skip.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-    });
-    sticky.appendChild(skip);
-  }
-
-  // Dots
   PORTFOLIO_ITEMS.forEach((_, i) => {
     const dot = document.createElement("button");
-    dot.className = "case-dot" + (i === 0 ? " is-active" : "");
-    dot.setAttribute("aria-label", `Кейс ${i + 1}`);
-    dot.addEventListener("click", () => scrollToCase(i));
+    dot.className = "works-dot" + (i === 0 ? " is-active" : "");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Работа ${i + 1}`);
+    dot.addEventListener("click", () => goTo(i));
     dotsWrap?.appendChild(dot);
   });
+  const dots = dotsWrap?.querySelectorAll(".works-dot");
 
-  const slides = sticky.querySelectorAll(".case-slide");
-  const dots   = dotsWrap?.querySelectorAll(".case-dot");
-  let currentCase = 0;
-
-  function setCase(idx) {
-    if (idx === currentCase && slides[idx]?.classList.contains("is-active")) return;
-    currentCase = idx;
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
-    dots?.forEach((d, i) => d.classList.toggle("is-active", i === idx));
-
-    // Обновляем десктопный каунтер
-    const cur = document.querySelector("#cases-count .cases-count__current");
-    if (cur) cur.textContent = String(idx + 1).padStart(2, "0");
+  function goTo(idx) {
+    current = (idx + n) % n;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots?.forEach((d, i) => d.classList.toggle("is-active", i === current));
   }
 
-  function scrollToCase(idx) {
-    if (isMobile) return;
-    const wrapTop = wrap.getBoundingClientRect().top + window.scrollY;
-    const segH    = wrap.offsetHeight / n;
-    // Прокручиваем к середине сегмента кейса
-    window.scrollTo({ top: wrapTop + idx * segH + segH * 0.1, behavior: "smooth" });
-  }
+  document.getElementById("works-prev")?.addEventListener("click", () => goTo(current - 1));
+  document.getElementById("works-next")?.addEventListener("click", () => goTo(current + 1));
 
-  // Десктоп: трекаем прогресс прокрутки внутри обёртки
-  if (!isMobile) {
-    let rafId;
-    window.addEventListener("scroll", () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        const rect       = wrap.getBoundingClientRect();
-        const vh         = window.innerHeight;
-        const scrollable = wrap.offsetHeight - vh;
-        if (scrollable <= 0) return;
+  // Свайп на мобильных (с защитой от случайного открытия лайтбокса)
+  let startX = 0;
+  let swiped = false;
+  track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; swiped = false; }, { passive: true });
+  track.addEventListener("touchmove", (e) => {
+    if (Math.abs(e.touches[0].clientX - startX) > 10) swiped = true;
+  }, { passive: true });
+  track.addEventListener("touchend", (e) => {
+    const dx = startX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) goTo(dx > 0 ? current + 1 : current - 1);
+  }, { passive: true });
 
-        // Ещё не вошли — первый кейс
-        if (rect.top > 0) return;
-
-        // Уже вышли из sticky-зоны — фиксируем последний кейс
-        if (rect.bottom < vh) {
-          setCase(n - 1);
-          return;
-        }
-
-        const scrolled = -rect.top;
-        const progress = Math.max(0, Math.min(1, scrolled / scrollable));
-        const idx      = Math.min(Math.floor(progress * n), n - 1);
-        setCase(idx);
-      });
-    }, { passive: true });
-
-    // Keyboard navigation: ← / → когда sticky в viewport
-    document.addEventListener("keydown", (e) => {
-      if (e.target.matches("input, textarea, select")) return;
-      const rect = wrap.getBoundingClientRect();
-      const inView = rect.top <= 0 && rect.bottom >= window.innerHeight;
-      if (!inView) return;
-
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        e.preventDefault();
-        scrollToCase(Math.min(n - 1, currentCase + 1));
-      }
-      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        e.preventDefault();
-        scrollToCase(Math.max(0, currentCase - 1));
-      }
-    });
-  }
-
-  setCase(0);
+  goTo(0);
 }
 
 /* ============================================================
