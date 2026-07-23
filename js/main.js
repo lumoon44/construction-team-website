@@ -460,7 +460,29 @@ document.addEventListener("DOMContentLoaded", () => {
   initMagneticButtons();
   initCounters();
   initPromoBadge();
+  initQuickCta();       // плавающие кнопки «Заявка» / «Смета»
 });
+
+/* ============================================================
+   ПЛАВАЮЩИЕ CTA — «Заявка» / «Смета»
+   Всегда видимы при скролле; уступают место только футеру,
+   чтобы не перекрывать контакты и копирайт.
+   ============================================================ */
+function initQuickCta() {
+  const cta = document.querySelector(".quick-cta");
+  const footer = document.getElementById("footer");
+  if (!cta || !footer) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        cta.classList.toggle("is-hidden", entry.isIntersecting);
+      });
+    },
+    { rootMargin: "0px 0px -20% 0px" }
+  );
+  observer.observe(footer);
+}
 
 /* ============================================================
    INJECT CONFIG DATA

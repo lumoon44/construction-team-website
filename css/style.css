@@ -3255,3 +3255,102 @@ button { font: inherit; cursor: none; border: none; background: none; }
 @media (max-width: 768px) {
   .accordion-item--main .accordion-btn__title { font-size: var(--size-md); }
 }
+
+
+/* ============================================================
+   ПЛАВАЮЩИЕ CTA — «Заявка» / «Смета»
+   Всегда видимы, переход к форме заявки и к ценам (смете).
+   ============================================================ */
+.quick-cta {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(0.9rem, 3vw, 1.6rem));
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  gap: var(--space-3);
+  transition: opacity var(--transition), transform var(--transition),
+              visibility var(--transition);
+}
+
+/* Прячем над модалками (мобильное меню, лайтбокс) и на футере,
+   чтобы не перекрывать контакты и копирайт */
+body.menu-open .quick-cta,
+body.lb-open .quick-cta,
+.quick-cta.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(14px);
+  pointer-events: none;
+}
+
+.quick-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-text);
+  background: rgba(11, 13, 24, 0.72);
+  border: 1px solid var(--color-border-warm);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.38);
+  transition: color var(--transition-fast), border-color var(--transition-fast),
+              background var(--transition-fast), transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.quick-cta__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-paper);
+  transform: translateY(-2px);
+}
+
+/* Первичная кнопка «Заявка» — акцентная заливка */
+.quick-cta__btn--accent {
+  background: var(--color-accent);
+  border-color: transparent;
+  color: #0c0906;
+  font-weight: 700;
+}
+
+.quick-cta__btn--accent:hover {
+  color: #0c0906;
+  box-shadow: 0 8px 34px var(--color-accent-glow);
+}
+
+/* Пульсирующая точка, как на референсе */
+.quick-cta__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent-glow);
+  animation: quickCtaPulse 2.2s ease-in-out infinite;
+}
+
+.quick-cta__btn--accent .quick-cta__dot {
+  background: #0c0906;
+  box-shadow: none;
+}
+
+@keyframes quickCtaPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-cta__dot { animation: none; }
+}
+
+@media (max-width: 480px) {
+  .quick-cta { gap: var(--space-2); width: max-content; max-width: calc(100vw - 1.6rem); }
+  .quick-cta__btn { padding: 0.65rem 1.15rem; letter-spacing: 0.06em; }
+}
