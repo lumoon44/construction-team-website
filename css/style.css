@@ -1390,70 +1390,65 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* ============================================================
    ОТЗЫВЫ
    ============================================================ */
-.testimonials__wrap {
-  position: relative;
-  overflow: hidden;
-  margin-top: var(--space-12);
+/* Отзывы — компактные «таблетки» в горизонтальной прокрутке */
+.reviews-row {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  margin-top: var(--space-6);
+  padding-bottom: var(--space-4);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-warm) transparent;
+}
+
+.reviews-row::-webkit-scrollbar { height: 5px; }
+.reviews-row::-webkit-scrollbar-track { background: transparent; }
+.reviews-row::-webkit-scrollbar-thumb {
+  background: var(--color-border-warm);
+  border-radius: 999px;
+}
+
+.review-pill {
+  flex: 0 0 auto;
+  width: clamp(240px, 80vw, 300px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--color-bg-elevated);
 }
 
-.testimonials-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.testimonial-slide {
-  min-width: 100%;
-  padding: var(--space-12) var(--space-16);
-  position: relative;
-}
-
-.testimonial__quote-mark {
-  position: absolute;
-  top: var(--space-8);
-  left: var(--space-12);
-  font-family: var(--font-display);
-  font-size: 7rem;
-  line-height: 0.8;
-  color: var(--color-accent);
-  opacity: 0.1;
-  font-style: italic;
-  font-weight: 600;
-  pointer-events: none;
-  user-select: none;
-}
-
-.testimonial__text {
-  font-family: var(--font-display);
-  font-size: clamp(var(--size-lg), 2.5vw, var(--size-xl));
-  font-style: italic;
-  font-weight: 500;
+.review-pill__text {
+  font-family: var(--font-body);
+  font-size: var(--size-sm);
   line-height: 1.55;
   color: var(--color-text);
-  margin-bottom: var(--space-10);
-  max-width: 70ch;
-  padding-left: var(--space-6);
-  border-left: 2px solid rgba(106, 170, 216, 0.35);
+  font-weight: 300;
 }
 
-.testimonial__author {
+.review-pill__author {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-2);
 }
 
-.testimonial__avatar {
-  width: 44px;
-  height: 44px;
+.review-pill__avatar {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--color-accent-dim);
   border: 1px solid var(--color-border-warm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--size-sm);
+  font-size: var(--size-xs);
   font-weight: 700;
   color: var(--color-accent);
   font-family: var(--font-body);
@@ -1461,32 +1456,23 @@ button { font: inherit; cursor: none; border: none; background: none; }
   letter-spacing: 0.04em;
 }
 
-.testimonial__author-info {
+.review-pill__author-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  min-width: 0;
 }
 
-.testimonial__name {
-  font-size: var(--size-base);
+.review-pill__name {
+  font-size: var(--size-sm);
   font-weight: 600;
 }
 
-.testimonial__role {
-  font-size: var(--size-sm);
+.review-pill__role {
+  font-size: var(--size-xs);
   color: var(--color-text-muted);
   font-weight: 300;
 }
-
-.testimonials__nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-8);
-  border-top: 1px solid var(--color-border);
-}
-
-.testimonials__arrows { display: flex; gap: var(--space-3); }
 
 .slider-btn {
   width: 40px;
@@ -1503,26 +1489,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .slider-btn:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
-}
-
-.testimonials-dots {
-  display: flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.testimonial-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--color-text-faint);
-  transition: background var(--transition-fast), transform var(--transition-fast);
-  cursor: pointer;
-}
-
-.testimonial-dot.is-active {
-  background: var(--color-accent);
-  transform: scale(1.6);
 }
 
 /* ============================================================
@@ -1974,8 +1940,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
   .portfolio-slide { aspect-ratio: 4/3; }
   .process-steps { grid-template-columns: repeat(2, 1fr); gap: var(--space-8); }
   .contacts__grid { grid-template-columns: 1fr; }
-  .testimonial-slide { padding: var(--space-8); }
-  .testimonial__quote-mark { left: var(--space-8); }
   .about__stat-grid { grid-template-columns: 1fr; }
   .values-grid { grid-template-columns: 1fr; }
   .footer__inner { grid-template-columns: 1fr; gap: var(--space-8); }

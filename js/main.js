@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCases();          // fullscreen sticky cases (заменяет initPortfolio)
   initPortfolio();      // no-op если #portfolio-track отсутствует
   initLightbox();
-  initTestimonialsSlider();
+  initTestimonials();
   initContactForm();
   initMagneticButtons();
   initCounters();
@@ -1019,13 +1019,9 @@ const TESTIMONIALS = [
   },
 ];
 
-function initTestimonialsSlider() {
+function initTestimonials() {
   const track = document.getElementById("testimonials-track");
-  const dotsWrap = document.getElementById("testimonials-dots");
   if (!track) return;
-
-  let current = 0;
-  let autoTimer;
 
   TESTIMONIALS.forEach((t) => {
     const initials = t.name
@@ -1035,59 +1031,21 @@ function initTestimonialsSlider() {
       .slice(0, 2)
       .toUpperCase();
 
-    const slide = document.createElement("div");
-    slide.className = "testimonial-slide";
-    slide.innerHTML = `
-      <div class="testimonial__quote-mark" aria-hidden="true">"</div>
-      <p class="testimonial__text">${t.text}</p>
-      <div class="testimonial__author">
-        <div class="testimonial__avatar" aria-hidden="true">${initials}</div>
-        <div class="testimonial__author-info">
-          <strong class="testimonial__name">${t.name}</strong>
-          <span class="testimonial__role">${t.role}</span>
+    const card = document.createElement("article");
+    card.className = "review-pill";
+    card.setAttribute("role", "listitem");
+    card.innerHTML = `
+      <p class="review-pill__text">${t.text}</p>
+      <div class="review-pill__author">
+        <div class="review-pill__avatar" aria-hidden="true">${initials}</div>
+        <div class="review-pill__author-info">
+          <strong class="review-pill__name">${t.name}</strong>
+          <span class="review-pill__role">${t.role}</span>
         </div>
       </div>
     `;
-    track.appendChild(slide);
+    track.appendChild(card);
   });
-
-  TESTIMONIALS.forEach((_, i) => {
-    const dot = document.createElement("button");
-    dot.className = "testimonial-dot";
-    dot.setAttribute("aria-label", `Отзыв ${i + 1}`);
-    dot.addEventListener("click", () => goTo(i));
-    dotsWrap?.appendChild(dot);
-  });
-
-  const dots = dotsWrap?.querySelectorAll(".testimonial-dot");
-
-  function goTo(index) {
-    current = index;
-    track.style.transform = `translateX(-${current * 100}%)`;
-    dots?.forEach((d, i) => d.classList.toggle("is-active", i === current));
-  }
-
-  function next() { goTo((current + 1) % TESTIMONIALS.length); }
-  function startAuto() { autoTimer = setInterval(next, 5000); }
-  function stopAuto() { clearInterval(autoTimer); }
-
-  document.getElementById("testimonials-prev")?.addEventListener("click", () => {
-    stopAuto();
-    goTo((current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-    startAuto();
-  });
-
-  document.getElementById("testimonials-next")?.addEventListener("click", () => {
-    stopAuto();
-    next();
-    startAuto();
-  });
-
-  goTo(0);
-  startAuto();
-
-  track.parentElement?.addEventListener("mouseenter", stopAuto);
-  track.parentElement?.addEventListener("mouseleave", startAuto);
 }
 
 /* ============================================================
