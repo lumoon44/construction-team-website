@@ -740,29 +740,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
 }
 
 /* Координаты-декор */
-.hero__coord {
-  position: absolute;
-  top: 120px;
-  right: var(--container-pad);
-  z-index: 2;
-  text-align: right;
-}
-
-.hero__coord-line {
-  display: block;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(110, 103, 96, 0.6);
-  font-family: var(--font-body);
-  font-weight: 500;
-  line-height: 2;
-}
-
-.hero__coord-line span {
-  color: rgba(106, 170, 216, 0.5);
-}
-
 /* Технический маркер CASE */
 .hero__case {
   position: absolute;
@@ -1964,7 +1941,6 @@ button { font: inherit; cursor: none; border: none; background: none; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
   .process-steps { grid-template-columns: repeat(2, 1fr); gap: var(--space-8); }
   .process-steps::before { display: none; }
-  .hero__coord { display: none; }
 }
 
 @media (max-width: 768px) {
