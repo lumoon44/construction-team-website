@@ -1120,6 +1120,17 @@ function initPageIntro() {
     return;
   }
 
+  // На смартфонах заставку пропускаем — оффер и услуги видны мгновенно.
+  // Это большая часть трафика (реклама), где важна каждая секунда.
+  const isMobile =
+    window.matchMedia("(max-width: 768px)").matches ||
+    window.matchMedia("(pointer: coarse)").matches;
+  if (isMobile) {
+    intro.remove();
+    sessionStorage.setItem("intro-seen", "1");
+    return;
+  }
+
   // Блокируем скролл на время интро
   document.documentElement.style.overflow = "hidden";
 
@@ -1128,17 +1139,16 @@ function initPageIntro() {
     requestAnimationFrame(() => {
       intro.classList.add("is-visible");
 
-      // Начинаем разъезд через 650ms после появления логотипа
+      // Держим логотип короче, чем раньше (было 650ms)
       setTimeout(() => {
         intro.classList.add("is-leaving");
 
-        // Ждём окончания анимации панелей (900ms transition)
         setTimeout(() => {
           document.documentElement.style.overflow = "";
           intro.remove();
           sessionStorage.setItem("intro-seen", "1");
-        }, 950);
-      }, 650);
+        }, 650);
+      }, 380);
     });
   });
 }
