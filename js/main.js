@@ -518,7 +518,35 @@ document.addEventListener("DOMContentLoaded", () => {
   initCounters();
   initPromoBadge();
   initQuickCta();       // плавающие кнопки «Заявка» / «Смета»
+  initGoals();          // цели Яндекс.Метрики (заявки, звонки, мессенджеры, CTA)
 });
+
+/* ============================================================
+   ЦЕЛИ ЯНДЕКС.МЕТРИКИ — отслеживание конверсий
+   ============================================================ */
+const YM_COUNTER = 110279624;
+
+// Безопасно отправляет достижение цели (если Метрика загружена)
+function ymGoal(name) {
+  if (typeof window.ym === "function") {
+    try { window.ym(YM_COUNTER, "reachGoal", name); } catch (e) {}
+  }
+}
+
+function initGoals() {
+  // Клики по телефону и мессенджерам = потенциальные заявки
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a");
+    if (!link) return;
+    const href = link.getAttribute("href") || "";
+
+    if (href.startsWith("tel:"))            ymGoal("phone_click");
+    else if (href.includes("wa.me"))        ymGoal("whatsapp_click");
+    else if (href.includes("t.me/"))        ymGoal("telegram_click");
+    else if (href.includes("#contact"))     ymGoal("cta_zayavka"); // кнопки, ведущие к форме
+    else if (href.includes("#pricing"))     ymGoal("cta_smeta");   // кнопка «Смета»
+  });
+}
 
 /* ============================================================
    ПЛАВАЮЩИЕ CTA — «Заявка» / «Смета»
@@ -1040,6 +1068,8 @@ function initContactForm() {
       Object.values(fields).forEach(({ el }) => {
         el?.closest(".field")?.classList.remove("is-valid", "has-error");
       });
+
+      ymGoal("form_submit"); // цель: заявка через форму отправлена
 
       if (status) {
         status.classList.add("is-visible");
