@@ -169,27 +169,39 @@
         </span>
       </a>
 
-      <nav id="nav-menu" class="nav__menu" aria-label="Основная навигация">
-        <a href="#about"    class="nav__link">О нас</a>
-        <a href="#services" class="nav__link">Услуги</a>
-        <a href="#pricing"  class="nav__link">Цены</a>
-        <a href="#portfolio" class="nav__link">Работы</a>
-        <a href="#process"  class="nav__link">Процесс</a>
-        <a href="#contact"  class="nav__link">Контакты</a>
-        <a href="#contact" class="btn btn--outline" style="padding: 0.55rem 1.2rem; font-size: 11px;">Обсудить проект</a>
-      </nav>
+      <div class="header__nav-group">
+        <nav id="nav-menu" class="nav__menu" aria-label="Основная навигация">
+          <a href="#about"    class="nav__link">О нас</a>
+          <a href="#services" class="nav__link">Услуги</a>
+          <a href="#pricing"  class="nav__link">Цены</a>
+          <a href="#portfolio" class="nav__link">Работы</a>
+          <a href="#process"  class="nav__link">Процесс</a>
+          <a href="#contact"  class="nav__link">Контакты</a>
+          <a href="#contact" class="btn btn--outline" style="padding: 0.55rem 1.2rem; font-size: 11px;">Обсудить проект</a>
+        </nav>
 
-      <button
-        id="burger"
-        class="burger"
-        aria-label="Открыть меню"
-        aria-expanded="false"
-        aria-controls="nav-menu"
-      >
-        <span class="burger__line"></span>
-        <span class="burger__line"></span>
-        <span class="burger__line"></span>
-      </button>
+        <!-- Кликабельный телефон: на мобильном — иконка (звонок в один тап) -->
+        <a href="tel:+79502459317" class="header__phone" aria-label="Позвонить: +7 (950) 245-93-17" data-config-href="contacts.phoneHref">
+          <span class="header__phone-icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <path d="M6.6 3.5h3.1l1.5 4.4-2.1 1.3a12.5 12.5 0 0 0 5.6 5.6l1.3-2.1 4.4 1.5v3.1a2 2 0 0 1-2.2 2A17.4 17.4 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="header__phone-num" data-config="contacts.phone">+7 (950) 245-93-17</span>
+        </a>
+
+        <button
+          id="burger"
+          class="burger"
+          aria-label="Открыть меню"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+        >
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -238,9 +250,9 @@
       </div>
 
       <h1 class="hero__title" id="hero-title">
-        Ландшафтный дизайн<br>и <em>освещение</em><br>
-        Благоустройство территории<br>
-        Автополив
+        <span class="hero__svc">Ландшафтный дизайн и <em>освещение</em></span>
+        <span class="hero__svc">Благоустройство территории</span>
+        <span class="hero__svc">Автополив</span>
       </h1>
 
       <p class="hero__tagline">
@@ -498,6 +510,12 @@
       </div>
 
       <form class="contact-form" id="contact-form" novalidate aria-label="Форма для связи">
+
+        <ul class="form-trust">
+          <li>Бесплатный замер</li>
+          <li>Смета за 24 часа</li>
+          <li>Гарантия 3 года</li>
+        </ul>
 
         <div class="field">
           <label class="field__label" for="field-name">Ваше имя</label>

@@ -502,7 +502,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .nav__menu {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  gap: 1.4rem;
 }
 
 .nav__link {
@@ -512,6 +512,7 @@ button { font: inherit; cursor: none; border: none; background: none; }
   color: var(--color-text-muted);
   transition: color var(--transition-fast);
   position: relative;
+  white-space: nowrap;
 }
 
 .nav__link::after {
@@ -551,6 +552,64 @@ button { font: inherit; cursor: none; border: none; background: none; }
 .burger.is-open .burger__line:nth-child(1) { transform: rotate(45deg) translate(4.7px, 4.7px); }
 .burger.is-open .burger__line:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .burger.is-open .burger__line:nth-child(3) { transform: rotate(-45deg) translate(4.7px, -4.7px); }
+
+/* Правая группа шапки: меню + телефон + бургер */
+.header__nav-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* Строчка доверия над формой заявки */
+.form-trust {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 var(--space-6);
+  padding: 0;
+}
+.form-trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--size-sm);
+  color: var(--color-text);
+  font-weight: 500;
+}
+.form-trust li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 6px var(--color-accent-glow);
+  flex-shrink: 0;
+}
+
+/* Кликабельный телефон в шапке */
+.header__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+  /* тёмный ореол — читаемость над светлой луной */
+  text-shadow: 0 0 12px rgba(7, 8, 13, 0.95), 0 1px 3px rgba(7, 8, 13, 0.9);
+}
+.header__phone:hover { color: var(--color-accent); }
+.header__phone-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
 
 /* ============================================================
    MARQUEE
@@ -917,6 +976,10 @@ button { font: inherit; cursor: none; border: none; background: none; }
   letter-spacing: -0.02em;
   margin-bottom: var(--space-6);
 }
+
+/* Три услуги — отдельными строками-группами с лёгким отступом */
+.hero__svc { display: block; }
+.hero__svc + .hero__svc { margin-top: 0.3em; }
 
 .hero__title em {
   font-style: normal;
@@ -1915,20 +1978,23 @@ button { font: inherit; cursor: none; border: none; background: none; }
 /* ============================================================
    МОБИЛЬНАЯ АДАПТАЦИЯ
    ============================================================ */
+/* На средних десктопах прячем номер (оставляем иконку) и дублирующую
+   кнопку «Обсудить проект» — есть телефон и плавающие кнопки заявки */
+@media (max-width: 1200px) {
+  .header__phone-num { display: none; }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .nav__menu .btn { display: none; }
+}
+
 @media (max-width: 1024px) {
   .about__grid { grid-template-columns: 1fr; gap: var(--space-12); }
   .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
   .footer__inner { grid-template-columns: 1fr 1fr; }
   .process-steps { grid-template-columns: repeat(2, 1fr); gap: var(--space-8); }
   .process-steps::before { display: none; }
-}
 
-@media (max-width: 768px) {
-  :root {
-    --space-24: 4rem;
-    --space-32: 5rem;
-  }
-
+  /* Планшеты/узкие экраны — меню в бургер (иначе инлайн-навигация не влезает) */
   .nav__menu {
     position: fixed;
     inset: 0;
@@ -1943,10 +2009,28 @@ button { font: inherit; cursor: none; border: none; background: none; }
     pointer-events: none;
     transition: opacity var(--transition);
   }
-
   .nav__menu.is-open { opacity: 1; pointer-events: all; }
   .nav__link { font-size: var(--size-xl); font-family: var(--font-display); }
   .burger { display: flex; }
+  .header__nav-group { gap: var(--space-4); }
+  /* телефон — круглая кнопка рядом с бургером */
+  .header__phone-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-warm);
+    background: rgba(11, 13, 24, 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --space-24: 4rem;
+    --space-32: 5rem;
+  }
+
   .hero__actions { flex-direction: column; align-items: flex-start; }
   .hero__scroll { display: none; }
   .hero__case { display: none; }
