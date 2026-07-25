@@ -3164,7 +3164,7 @@ body.lb-open .quick-cta,
 .svc-features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
-  gap: var(--space-5);
+  gap: var(--space-4);
   margin-top: var(--space-8);
 }
 .svc-feature {
@@ -3238,7 +3238,7 @@ body.lb-open .quick-cta,
   flex: 1 1 220px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-4) var(--space-6);
   background: var(--color-bg-elevated);
   color: var(--color-paper);
   font-family: var(--font-display);
