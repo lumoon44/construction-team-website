@@ -611,7 +611,15 @@ const PRICING_DATA = [
 /* ============================================================
    ИНИЦИАЛИЗАЦИЯ
    ============================================================ */
+// requestIdleCallback есть не везде (нет в Safari) — со таймаутом-фолбэком
+const scheduleIdle =
+  window.requestIdleCallback ||
+  function (cb) {
+    return setTimeout(() => cb({ didTimeout: true, timeRemaining: () => 0 }), 1);
+  };
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Критичный путь — то, что нужно сразу для первого экрана и его интерактивности
   initPageIntro();      // первым — блокирует скролл и запускает reveal
   injectConfigData();
   initCursor();
@@ -623,16 +631,24 @@ document.addEventListener("DOMContentLoaded", () => {
   initParallax();
   initSplitText();      // учитывает intro-задержку через sessionStorage
   initMarquee();
-  initPricing();        // аккордеон с прайсом
-  initWorksCarousel();  // карусель работ
   initLightbox();
-  initTestimonials();
   initContactForm();
   initMagneticButtons();
   initCounters();
   initPromoBadge();
   initQuickCta();       // плавающие кнопки «Заявка» / «Смета»
   initGoals();          // цели Яндекс.Метрики (заявки, звонки, мессенджеры, CTA)
+
+  // Остальное — рендер тяжёлых блоков ниже первого экрана (прайс-аккордеон,
+  // карусель работ, отзывы). Откладываем на простой поток, чтобы не держать
+  // его занятым сразу после загрузки и не тормозить отклик на первый тап
+  // (влияет на INP, особенно на слабых мобильных). Таймаут гарантирует,
+  // что контент всё равно отрисуется быстро, даже если «простоя» не будет.
+  scheduleIdle(() => {
+    initPricing();        // аккордеон с прайсом
+    initWorksCarousel();  // карусель работ
+    initTestimonials();
+  }, { timeout: 1200 });
 });
 
 /* ============================================================

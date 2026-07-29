@@ -626,6 +626,10 @@ button { font: inherit; cursor: none; border: none; background: none; }
   display: flex;
   width: max-content;
   animation: marqueeScroll 28s linear infinite;
+  /* Резервируем высоту строки городов ещё до того, как JS вставит контент —
+     иначе полоса «схлопывается» на старте и раздвигается после рендера
+     (источник заметного CLS). Значение измерено по факту рендера. */
+  min-height: 19px;
 }
 
 .marquee-track:hover {
