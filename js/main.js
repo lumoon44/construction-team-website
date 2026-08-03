@@ -644,11 +644,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // его занятым сразу после загрузки и не тормозить отклик на первый тап
   // (влияет на INP, особенно на слабых мобильных). Таймаут гарантирует,
   // что контент всё равно отрисуется быстро, даже если «простоя» не будет.
-  scheduleIdle(() => {
-    initPricing();        // аккордеон с прайсом
-    initWorksCarousel();  // карусель работ
-    initTestimonials();
-  }, { timeout: 1200 });
+  //
+  // Каждый блок — отдельным вызовом scheduleIdle и в своём try/catch:
+  // если один упадёт с ошибкой, это не должно блокировать остальные два
+  // (раньше все три были в одной функции и падали вместе).
+  [initPricing, initWorksCarousel, initTestimonials].forEach((fn) => {
+    scheduleIdle(() => {
+      try {
+        fn();
+      } catch (err) {
+        console.error(`Ошибка инициализации ${fn.name}:`, err);
+      }
+    }, { timeout: 1200 });
+  });
 });
 
 /* ============================================================
@@ -1560,6 +1568,7 @@ function initPromoBadge() {
     els.secs.textContent = pad(secs);
   }
 
+  let intervalId;
   tick();
-  const intervalId = setInterval(tick, 1000);
+  intervalId = setInterval(tick, 1000);
 }
