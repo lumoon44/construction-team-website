@@ -1472,68 +1472,17 @@ function initPricing() {
     panel.setAttribute("aria-labelledby", btn.id);
     panel.hidden = true;
 
-    if (section.comingSoon) {
-      // Раздел-заглушка: прайс появится позже, смета — по заявке
-      const ph = document.createElement("div");
-      ph.className = "pricing-placeholder";
-      ph.innerHTML = `
-        <p>${section.placeholder}</p>
-        <a href="#contact" class="btn btn--outline">Получить смету</a>
-      `;
-      ph.querySelector("a").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-      });
-      panel.appendChild(ph);
-    } else {
-      section.groups.forEach((group) => {
-        // Подзаголовок группы — только если групп несколько
-        if (section.groups.length > 1) {
-          const groupTitle = document.createElement("h4");
-          groupTitle.className = "price-group__title";
-          groupTitle.textContent = group.title;
-          panel.appendChild(groupTitle);
-        }
-
-        const table = document.createElement("table");
-        table.className = "price-table";
-        table.innerHTML = `
-          <thead>
-            <tr>
-              <th scope="col">Наименование работы</th>
-              <th scope="col" class="price-table__unit">Ед.</th>
-              <th scope="col" class="price-table__price">Цена, ₽</th>
-            </tr>
-          </thead>
-        `;
-        const tbody = document.createElement("tbody");
-        group.rows.forEach((row) => {
-          const priceText =
-            typeof row.price === "number"
-              ? row.price.toLocaleString("ru-RU")
-              : row.price;
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${row.name}</td>
-            <td class="price-table__unit">${row.unit}</td>
-            <td class="price-table__price">${priceText}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        panel.appendChild(table);
-      });
-
-      if (section.note) {
-        const note = document.createElement("p");
-        note.className = "pricing-section__note";
-        note.textContent = section.note;
-        panel.appendChild(note);
-      }
-    }
-
-    // Открытие / закрытие
+    // Открытие / закрытие. Содержимое панели (таблицы на сотни строк для
+    // некоторых разделов) строим лениво, при первом раскрытии — не всё
+    // сразу при загрузке. Раньше все 5 разделов (246 строк суммарно)
+    // рендерились в одном синхронном проходе, что могло попасть в момент
+    // тапа пользователя и раздувало INP на мобильных.
+    let panelRendered = false;
     btn.addEventListener("click", () => {
+      if (!panelRendered) {
+        renderPricingPanel(panel, section);
+        panelRendered = true;
+      }
       const expanded = btn.getAttribute("aria-expanded") === "true";
       btn.setAttribute("aria-expanded", String(!expanded));
       panel.hidden = expanded;
@@ -1556,6 +1505,71 @@ function initPricing() {
   });
 
   wrap.appendChild(sectionEl);
+}
+
+// Строит содержимое одной панели прайса (таблицы или заглушку). Вызывается
+// один раз, при первом раскрытии соответствующего раздела — см. initPricing().
+function renderPricingPanel(panel, section) {
+  if (section.comingSoon) {
+    // Раздел-заглушка: прайс появится позже, смета — по заявке
+    const ph = document.createElement("div");
+    ph.className = "pricing-placeholder";
+    ph.innerHTML = `
+      <p>${section.placeholder}</p>
+      <a href="#contact" class="btn btn--outline">Получить смету</a>
+    `;
+    ph.querySelector("a").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    });
+    panel.appendChild(ph);
+    return;
+  }
+
+  section.groups.forEach((group) => {
+    // Подзаголовок группы — только если групп несколько
+    if (section.groups.length > 1) {
+      const groupTitle = document.createElement("h4");
+      groupTitle.className = "price-group__title";
+      groupTitle.textContent = group.title;
+      panel.appendChild(groupTitle);
+    }
+
+    const table = document.createElement("table");
+    table.className = "price-table";
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th scope="col">Наименование работы</th>
+          <th scope="col" class="price-table__unit">Ед.</th>
+          <th scope="col" class="price-table__price">Цена, ₽</th>
+        </tr>
+      </thead>
+    `;
+    const tbody = document.createElement("tbody");
+    group.rows.forEach((row) => {
+      const priceText =
+        typeof row.price === "number"
+          ? row.price.toLocaleString("ru-RU")
+          : row.price;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.name}</td>
+        <td class="price-table__unit">${row.unit}</td>
+        <td class="price-table__price">${priceText}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    panel.appendChild(table);
+  });
+
+  if (section.note) {
+    const note = document.createElement("p");
+    note.className = "pricing-section__note";
+    note.textContent = section.note;
+    panel.appendChild(note);
+  }
 }
 
 /* ============================================================
