@@ -282,6 +282,19 @@
         </div>
         <a href="#contact" class="btn btn--primary promo-badge__btn magnetic-btn">Оставить заявку</a>
       </div>
+      <script>
+        // Синхронно, до отрисовки: если акция уже истекла, сразу убираем
+        // плашку из потока. Раньше её прятал initPromoBadge() в main.js —
+        // но это происходило уже ПОСЛЕ первого рендера (DOMContentLoaded),
+        // и весь блок ниже (H1, теглайн, кнопки) заметно "прыгал" вверх —
+        // это и была основная причина плохого CLS на сайте.
+        (function () {
+          var badge = document.getElementById("promo-badge");
+          if (badge && Date.now() > new Date(2026, 6, 31, 23, 59, 59).getTime()) {
+            badge.style.display = "none";
+          }
+        })();
+      </script>
 
       <h1 class="hero__title" id="hero-title">
         <span class="hero__svc">Ландшафтный дизайн и <em>освещение</em></span>
