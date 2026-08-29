@@ -31,6 +31,25 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({ ok: true });
 };
 
+// Метаданные чата хранятся отдельным хэшем, независимо от authorized_chats.
+// first_seen проставляется один раз через HSETNX и больше никогда не
+// перезаписывается — это неизменяемая метка "чат существует с такого-то
+// момента". last_seen обновляется на каждое сообщение через HSET (это
+// upsert: одно и то же поле просто получает новое значение, новых записей
+// не создаётся). При /logout эта история не трогается — удаляется только
+// членство в authorized_chats, чат просто перестаёт получать рассылку, но
+// не "исчезает" бесследно.
+async function touchChatMeta(chatId) {
+  const key = `chat:${chatId}:meta`;
+  const now = new Date().toISOString();
+  try {
+    await redis("HSETNX", key, "first_seen", now);
+    await redis("HSET", key, "last_seen", now);
+  } catch (err) {
+    console.error("Redis error (chat meta):", err);
+  }
+}
+
 async function handleMessage(chatId, text) {
   if (!redisConfigured()) {
     return sendTelegramMessage(
@@ -38,6 +57,8 @@ async function handleMessage(chatId, text) {
       "⚠️ Хранилище не подключено (Upstash Redis). Обратитесь к администратору."
     );
   }
+
+  await touchChatMeta(chatId);
 
   const password = process.env.BOT_PASSWORD;
   const isOwner = String(chatId) === String(process.env.TELEGRAM_CHAT_ID);
@@ -59,6 +80,8 @@ async function handleMessage(chatId, text) {
       );
     }
     if (text === password) {
+      // SADD идемпотентен: повторный ввод пароля тем же чатом не создаёт
+      // дубликат в множестве и не сбрасывает уже накопленную историю.
       await redis("SADD", "authorized_chats", String(chatId));
       return sendTelegramMessage(
         chatId,
@@ -69,6 +92,8 @@ async function handleMessage(chatId, text) {
   }
 
   if (text === "/logout") {
+    // Убираем только из списка активной рассылки — history (chat:*:meta)
+    // не удаляется, first_seen остаётся навсегда.
     await redis("SREM", "authorized_chats", String(chatId));
     return sendTelegramMessage(
       chatId,
